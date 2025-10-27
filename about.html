@@ -6,10 +6,73 @@ header-img: "img/about.jpg"
 ---
 
 <!-- Language Selector -->
-<select onchange= "onLanChange(this.options[this.options.selectedIndex].value)">
-    <option value="0" selected> 中文 Chinese </option>
-    <option value="1"> 英语 English </option>
-</select>
+<div class="language-selector">
+    <button class="lang-btn active" onclick="onLanChange(0)" data-lang="0">
+        <span class="lang-icon">🇨🇳</span> 中文
+    </button>
+    <button class="lang-btn" onclick="onLanChange(1)" data-lang="1">
+        <span class="lang-icon">🇬🇧</span> English
+    </button>
+</div>
+
+<style>
+    .language-selector {
+        display: inline-flex;
+        background: #f8f9fa;
+        border-radius: 25px;
+        padding: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        gap: 4px;
+    }
+    
+    .lang-btn {
+        border: none;
+        background: transparent;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        outline: none;
+    }
+    
+    .lang-btn:hover {
+        color: #0085a1;
+        background: rgba(0, 133, 161, 0.05);
+    }
+    
+    .lang-btn.active {
+        background: white;
+        color: #0085a1;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .lang-icon {
+        font-size: 16px;
+        line-height: 1;
+    }
+    
+    @media only screen and (max-width: 768px) {
+        .language-selector {
+            margin-top: 15px;
+        }
+        
+        .lang-btn {
+            padding: 6px 16px;
+            font-size: 13px;
+        }
+        
+        .lang-icon {
+            font-size: 14px;
+        }
+    }
+</style>
 
 <!-- Chinese Version -->
 <div class="zh post-container">
@@ -39,7 +102,10 @@ header-img: "img/about.jpg"
 <script type="text/javascript">
     var $zh = document.querySelector(".zh");
     var $en = document.querySelector(".en");
+    var langButtons = document.querySelectorAll(".lang-btn");
+    
     function onLanChange(index){
+        // 切换语言显示
         if(index == 0){
             $zh.style.display = "block";
             $en.style.display = "none";
@@ -47,7 +113,18 @@ header-img: "img/about.jpg"
             $en.style.display = "block";
             $zh.style.display = "none";
         }
+        
+        // 更新按钮激活状态
+        langButtons.forEach(function(btn) {
+            if(btn.getAttribute('data-lang') == index) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
     }
+    
+    // 初始化显示中文
     onLanChange(0);
 </script>
 
