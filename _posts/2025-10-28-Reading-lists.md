@@ -86,7 +86,7 @@ tags:
 ### 📚 Books（书籍）
 
 
-| 书名                                                                        | 作者                | 类别       |
+| 书名                                                                        | 作者                | 主题        |
 | --------------------------------------------------------------------------- | ------------------- | ---------- |
 | [设计数据密集型应用（第二版）](https://ddia.vonng.com/)                     | Martin Kleppmann    | 分布式系统 |
 | [深入理解计算机系统 (CSAPP)](https://csapp.cs.cmu.edu/)                     | Bryant & O'Hallaron | 计算机基础 |
@@ -99,7 +99,7 @@ tags:
 ### 📄 Papers（论文/资源）
 
 
-| 题目                                                                                                                                         | 来源                                | 类别       |
+| 题目                                                                                                                                         | 来源                                | 主题        |
 | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ---------- |
 | [Ilya Sutskever's Top 30 Reading List](https://aman.ai/primers/ai/top-30-papers/)                                                            | Aman.ai                             | AI/ML      |
 | [MIT 6.824: Distributed Systems](https://pdos.csail.mit.edu/6.824/schedule.html)                                                             | MIT                                 | 分布式系统 |
@@ -126,6 +126,7 @@ tags:
 | [C++ Coroutine 系列](https://mysteriouspreserve.com/blog/2024/10/07/Cpp-Coroutine-Part-1/)                                                    | [萧叶轩](https://mysteriouspreserve.com/)            | C++ 协程   |
 | [Coroutine Theory & Practice](https://lewissbaker.github.io/)                                                                                 | Lewis Baker                                          | C++ 协程   |
 | [Jsonptr: Memory-Safe, Zero-Allocation JSON Decoder](https://nigeltao.github.io/blog/2020/jsonptr.html)                                       | Nigel Tao                                            | JSON 解析  |
+| [RocksDB Architecture Guide](https://github.com/facebook/rocksdb/wiki/RocksDB-Overview) | RocksDB | 架构设计 |
 
 ---
 
