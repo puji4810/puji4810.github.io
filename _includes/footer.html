@@ -177,3 +177,45 @@
     })();
 </script>
 {% endif %}
+
+<!-- Mermaid Support - Latest Version with Packet Diagram -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    
+    mermaid.initialize({ 
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose',
+        fontFamily: 'Arial, sans-serif',
+        // Enable packet diagrams and other experimental features
+        packet: {
+            useMaxWidth: true,
+            diagramPadding: 8,
+            showBits: true
+        },
+        flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            curve: 'basis'
+        }
+    });
+    
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.contentLoaded();
+        });
+    }
+</script>
+
+<!-- Fallback for browsers that don't support ES modules -->
+<script nomodule src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script nomodule>
+    if (window.mermaid) {
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    }
+</script>
