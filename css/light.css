@@ -105,3 +105,20 @@ html:not(.dark) .post-preview:hover {
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal.in { opacity: 1; transform: none; transition: none; }
 }
+
+/* Archive summary card */
+html:not(.dark) .archive-summary {
+  background: rgba(255,255,255,0.72);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* Header readability overlay */
+.intro-header{ position: relative; }
+@media (min-width: 768px){
+  .intro-header::after{
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.18) 100%);
+  }
+}
