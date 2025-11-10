@@ -76,6 +76,17 @@ html:not(.dark) .highlight pre code { white-space: pre !important; }
 html:not(.dark) pre code { white-space: pre !important; }
 html:not(.dark) .post-container pre { white-space: pre !important; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
+/* Reduce scroll trapping on code and tables */
+html:not(.dark) .highlight pre,
+html:not(.dark) pre {
+  -webkit-overflow-scrolling: auto; /* avoid iOS capturing vertical scroll */
+  touch-action: pan-y;              /* allow vertical gestures to bubble */
+}
+html:not(.dark) .table-responsive {
+  overflow-y: visible;              /* don't capture vertical scroll */
+  touch-action: pan-y;
+}
+
 /* Pinned badge */
 html:not(.dark) .pinned-badge {
   display: inline-block;

@@ -4,7 +4,7 @@ title:      "Reading List 2025"
 subtitle:   "记录这一年的阅读足迹 📚"
 date:       2025-10-27 00:00:00
 author:     "Puji"
-header-img: "img/f12025.png"
+header-img: "img/hero.svg"
 catalog: true
 tags:
     - Reading
