@@ -58,14 +58,20 @@
                 // prevent frequently toggle
                 if($navbar.className.indexOf('in') < 0) {
                     $collapse.style.height = "0px"
+                    // restore scroll when menu closes
+                    document.body.style.overflow = ''
                 }
             },400)
         }else{
         // OPEN
             $collapse.style.height = "auto"
             $navbar.className += " in";
+            // prevent background scroll when menu opens
+            document.body.style.overflow = 'hidden'
         }
     }
+    // ensure initial state has scroll enabled
+    document.body.style.overflow = ''
     // Theme toggle
     (function(){
         var btn = document.getElementById('theme-toggle');
