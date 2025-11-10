@@ -122,3 +122,10 @@ html:not(.dark) .archive-summary {
     background: linear-gradient(to bottom, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.18) 100%);
   }
 }
+
+/* Ensure header titles don't stick to top, esp. mobile */
+@media (max-width: 767px){
+  .intro-header .site-heading,
+  .intro-header .page-heading,
+  .intro-header .post-heading{ padding-top: 130px; padding-bottom: 50px; }
+}
