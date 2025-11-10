@@ -1,7 +1,7 @@
 /* Light theme comfort tweaks */
 
 html:not(.dark) body {
-  background-color: #f8fafc; /* softer than pure white */
+  background-color: #faf7f2; /* warm off-white to ease eye strain */
   color: #0f172a; /* dark slate text */
 }
 

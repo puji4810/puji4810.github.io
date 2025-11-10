@@ -127,19 +127,29 @@
     }
 </script>
 
-<!-- Reveal on scroll for post previews -->
+<!-- Reveal on scroll for post previews + lazy image hints -->
 <script>
   (function(){
+    // Graceful reveal
     var items = document.querySelectorAll('.reveal');
-    if (!items || items.length === 0) return;
-    if (!('IntersectionObserver' in window)) {
-      for (var i=0;i<items.length;i++){ items[i].classList.add('in'); }
-      return;
+    if (items && items.length > 0) {
+      if (!('IntersectionObserver' in window)) {
+        for (var i=0;i<items.length;i++){ items[i].classList.add('in'); }
+      } else {
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { rootMargin: '200px 0px 200px 0px', threshold: 0.01 }); // preload earlier
+        for (var i=0;i<items.length;i++){ io.observe(items[i]); }
+      }
     }
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
-    for (var i=0;i<items.length;i++){ io.observe(items[i]); }
+
+    // Hint browser to lazy-load images
+    var imgs = document.querySelectorAll('img');
+    for (var j=0;j<imgs.length;j++){
+      var im = imgs[j];
+      im.setAttribute('loading','lazy');
+      im.setAttribute('decoding','async');
+    }
   })();
 </script>
 
