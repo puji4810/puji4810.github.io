@@ -4,7 +4,7 @@ title:      "LevelDB DBformat"
 subtitle:   "The Design of LevelDB's Database Format "
 date:       2025-11-1 00:00:00
 author:     "Puji"
-header-img: "img/Thank You Lewis Desktop Wallpaper 3.jpg"
+header-img: "img/hero.svg"
 catalog: true
 tags:
     - LevelDB
@@ -12,7 +12,11 @@ tags:
     - KV 
 ---
 
+summary: "InternalKey and LookupKey formats, value types, sequence numbers, and comparator rules in LevelDB."
+
 # Database Format Design
+
+<!-- more -->
 
 ## Internal Key Format
 
@@ -212,4 +216,3 @@ LevelDB approach:
 - Better cache locality
 - Arena-friendly (no small object allocations)
 - Pointer-sized node overhead
-

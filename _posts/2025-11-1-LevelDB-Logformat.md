@@ -4,13 +4,17 @@ title:      "LevelDB Logformat"
 subtitle:   "The Design of LevelDB's Log Format "
 date:       2025-11-1 00:00:00
 author:     "Puji"
-header-img: "img/Thank You Lewis Desktop Wallpaper 3.jpg"
+header-img: "img/hero.svg"
 catalog: true
 tags:
     - LevelDB
     - Prism
     - KV 
 ---
+
+summary: "Structure of LevelDB's write-ahead log blocks and record fragmentation."
+
+<!-- more -->
 
 <div class="mermaid">
 ---

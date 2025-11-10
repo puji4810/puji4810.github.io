@@ -4,13 +4,15 @@ title:      "LevelDB Memformat"
 subtitle:   "The Design of LevelDB's Memtable Format "
 date:       2025-11-1 00:00:00
 author:     "Puji"
-header-img: "img/Thank You Lewis Desktop Wallpaper 3.jpg"
+header-img: "img/hero.svg"
 catalog: true
 tags:
     - LevelDB
     - Prism
     - KV 
 ---
+
+summary: "MemTable design: SkipList-based in-memory buffer, arena allocation, and encoded entry layout."
 
 # MemTable Design
 
@@ -22,6 +24,8 @@ MemTable is an in-memory write buffer that:
 - Uses SkipList for efficient lookups and iteration
 - Manages memory with Arena allocator
 - Supports MVCC through InternalKey encoding
+
+<!-- more -->
 
 <div class="mermaid">
 graph TB

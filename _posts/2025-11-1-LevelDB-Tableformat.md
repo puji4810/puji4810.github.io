@@ -4,7 +4,7 @@ title:      "LevelDB Table format"
 subtitle:   "The Design of LevelDB's Table Format "
 date:       2025-11-1 00:00:00
 author:     "Puji"
-header-img: "img/Thank You Lewis Desktop Wallpaper 3.jpg"
+header-img: "img/hero.svg"
 catalog: true
 tags:
     - LevelDB
@@ -12,6 +12,9 @@ tags:
     - KV 
 ---
 
+summary: "Overview of WriteBatch layout and record encoding for LevelDB table operations."
+
+<!-- more -->
 <div class="mermaid">
 ---
 config:
