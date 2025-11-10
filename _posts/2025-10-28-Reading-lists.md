@@ -9,6 +9,7 @@ catalog: true
 tags:
     - Reading
     - Life
+sticky: true
 ---
 > "如果你发现你几乎把所有的时间都花在了理论上，那就开始把一些注意力转向实际的东西；这会提高你的理论水平。" —— 高德纳
 

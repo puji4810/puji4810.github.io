@@ -61,3 +61,15 @@ html:not(.dark) .highlight pre { overflow-x: auto; -webkit-overflow-scrolling: t
 html:not(.dark) .highlight pre code { white-space: pre !important; }
 html:not(.dark) pre code { white-space: pre !important; }
 html:not(.dark) .post-container pre { white-space: pre !important; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Pinned badge */
+html:not(.dark) .pinned-badge {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #0085a1;
+  border-radius: 4px;
+}
