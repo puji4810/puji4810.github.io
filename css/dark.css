@@ -16,6 +16,13 @@ html.dark body {
   }
 }
 
+/* Prevent hidden mobile menu from blocking content */
+@media (max-width: 767px){
+  html.dark #huxblog_navbar{ pointer-events: none; visibility: hidden; }
+  html.dark #huxblog_navbar .navbar-collapse{ overflow: hidden; }
+  html.dark #huxblog_navbar.in{ pointer-events: auto; visibility: visible; }
+}
+
 html.dark a,
 html.dark .post-container a {
   color: #93c5fd;
