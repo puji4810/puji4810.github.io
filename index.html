@@ -7,7 +7,7 @@ description: "PJ's Blog"
 {%- if show_pins -%}
 {%- assign pinned_posts = site.posts | where: 'sticky', true -%}
 {%- for post in pinned_posts -%}
-<div class="post-preview pinned">
+<div class="post-preview pinned reveal">
     <a href="{{ post.url | prepend: site.baseurl }}">
         <div class="pinned-badge">置顶</div>
         <h2 class="post-title">
@@ -25,15 +25,13 @@ description: "PJ's Blog"
     <p class="post-meta">
         Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
     </p>
-    <hr>
-    
 </div>
 {%- endfor -%}
 {%- endif -%}
 
 {% for post in paginator.posts %}
 {% unless post.sticky %}
-<div class="post-preview">
+ <div class="post-preview reveal">
     <a href="{{ post.url | prepend: site.baseurl }}">
         <h2 class="post-title">
             {{ post.title }}
@@ -50,8 +48,7 @@ description: "PJ's Blog"
     <p class="post-meta">
         Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
     </p>
-</div>
-<hr>
+ </div>
 {% endunless %}
 {% endfor %}
 
