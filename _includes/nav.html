@@ -55,23 +55,24 @@
             $navbar.className = " ";
             // wait until animation end.
             setTimeout(function(){
-                // prevent frequently toggle
                 if($navbar.className.indexOf('in') < 0) {
                     $collapse.style.height = "0px"
-                    // restore scroll when menu closes
-                    document.body.style.overflow = ''
                 }
-            },400)
+            },300)
         }else{
         // OPEN
             $collapse.style.height = "auto"
             $navbar.className += " in";
-            // prevent background scroll when menu opens
-            document.body.style.overflow = 'hidden'
         }
     }
-    // ensure initial state has scroll enabled
-    document.body.style.overflow = ''
+    // safety: ensure no leftover inline styles lock scroll
+    try { document.body.style.overflow = ''; } catch(e){}
+    window.addEventListener('resize', function(){
+        // close menu on resize to avoid stuck states
+        $navbar.className = " ";
+        $collapse.style.height = "0px";
+        try { document.body.style.overflow = ''; } catch(e){}
+    });
     // Theme toggle
     (function(){
         var btn = document.getElementById('theme-toggle');

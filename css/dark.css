@@ -30,6 +30,10 @@ html.dark html, html.dark body, html.dark .post-container, html.dark .container{
   html.dark #huxblog_navbar.in .navbar-collapse{ display: block; }
 }
 
+@media (max-width: 767px){
+  html.dark body{ -webkit-overflow-scrolling: touch; }
+}
+
 html.dark a,
 html.dark .post-container a {
   color: #93c5fd;

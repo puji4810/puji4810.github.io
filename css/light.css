@@ -120,6 +120,11 @@ html:not(.dark) .post-preview:hover {
   #huxblog_navbar.in .navbar-collapse{ display: block; }
 }
 
+/* Avoid unexpected scroll locking by transformed elements */
+@media (max-width: 767px){
+  body{ -webkit-overflow-scrolling: touch; }
+}
+
 /* Archive summary card */
 html:not(.dark) .archive-summary {
   background: rgba(255,255,255,0.72);
