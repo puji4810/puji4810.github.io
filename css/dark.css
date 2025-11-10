@@ -46,6 +46,20 @@ html.dark .navbar-default .navbar-nav>li>a:hover {
 html.dark .navbar-default .navbar-toggle .icon-bar {
   background-color: #e5e7eb;
 }
+html.dark .navbar-default .navbar-toggle {
+  background: transparent;
+  border-color: #334155;
+}
+/* Mobile collapse panel in dark mode */
+@media (max-width: 767px){
+  html.dark .navbar-default .navbar-collapse{
+    background: rgba(11,18,32,0.96) !important;
+    border: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  html.dark #huxblog_navbar .navbar-collapse a{ color: #e5e7eb; }
+  html.dark #huxblog_navbar .navbar-collapse a:hover{ color: #bfdbfe; }
+}
 
 /* Footer */
 html.dark footer {
