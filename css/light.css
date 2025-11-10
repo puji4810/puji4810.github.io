@@ -111,6 +111,9 @@ html:not(.dark) .post-preview:hover {
   #huxblog_navbar{ pointer-events: none; visibility: hidden; }
   #huxblog_navbar .navbar-collapse{ overflow: hidden; }
   #huxblog_navbar.in{ pointer-events: auto; visibility: visible; }
+  /* hard hide collapsed panel to avoid overlay */
+  #huxblog_navbar:not(.in) .navbar-collapse{ display: none !important; }
+  #huxblog_navbar.in .navbar-collapse{ display: block; }
 }
 
 /* Archive summary card */

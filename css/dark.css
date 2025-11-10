@@ -21,6 +21,9 @@ html.dark body {
   html.dark #huxblog_navbar{ pointer-events: none; visibility: hidden; }
   html.dark #huxblog_navbar .navbar-collapse{ overflow: hidden; }
   html.dark #huxblog_navbar.in{ pointer-events: auto; visibility: visible; }
+  /* hard hide collapsed panel to avoid overlay */
+  html.dark #huxblog_navbar:not(.in) .navbar-collapse{ display: none !important; }
+  html.dark #huxblog_navbar.in .navbar-collapse{ display: block; }
 }
 
 html.dark a,
