@@ -10,9 +10,8 @@ tags:
     - LevelDB
     - Prism
     - KV 
----
-
 summary: "MemTable design: SkipList-based in-memory buffer, arena allocation, and encoded entry layout."
+---
 
 # MemTable Design
 

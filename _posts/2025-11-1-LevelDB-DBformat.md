@@ -10,10 +10,8 @@ tags:
     - LevelDB
     - Prism
     - KV 
----
-
 summary: "InternalKey and LookupKey formats, value types, sequence numbers, and comparator rules in LevelDB."
-
+---
 # Database Format Design
 
 <!-- more -->

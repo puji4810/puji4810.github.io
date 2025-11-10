@@ -10,9 +10,8 @@ tags:
     - LevelDB
     - Prism
     - KV 
----
-
 summary: "Overview of WriteBatch layout and record encoding for LevelDB table operations."
+---
 
 <!-- more -->
 <div class="mermaid">

@@ -10,9 +10,8 @@ tags:
     - LevelDB
     - Prism
     - KV 
----
-
 summary: "Structure of LevelDB's write-ahead log blocks and record fragmentation."
+---
 
 <!-- more -->
 

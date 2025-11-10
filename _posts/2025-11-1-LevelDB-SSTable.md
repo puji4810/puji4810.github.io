@@ -10,10 +10,8 @@ tags:
     - LevelDB
     - Prism
     - KV 
----
-
 summary: "SSTable file layout, block structure, and encoding details used by LevelDB."
-
+---
 # SSTable Format
 
 SSTable (Sorted String Table) is the on-disk storage format for Prism. It stores sorted key-value pairs in an immutable, block-based structure optimized for both sequential scans and random lookups.
