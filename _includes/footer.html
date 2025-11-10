@@ -181,29 +181,73 @@
 <!-- Mermaid Support - Latest Version with Packet Diagram -->
 <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    
-    mermaid.initialize({ 
-        startOnLoad: true,
-        theme: 'default',
-        securityLevel: 'loose',
-        fontFamily: 'Arial, sans-serif',
-        // Enable packet diagrams and other experimental features
-        packet: {
-            useMaxWidth: true,
-            diagramPadding: 8,
-            showBits: true
-        },
-        flowchart: {
-            useMaxWidth: true,
-            htmlLabels: true,
-            curve: 'basis'
+
+    function isDark(){ return document.documentElement.classList.contains('dark'); }
+    function baseConfig(){
+        var dark = isDark();
+        return {
+            startOnLoad: true,
+            theme: dark ? 'dark' : 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Arial, sans-serif',
+            themeVariables: dark ? {
+                background: '#0b1220',
+                lineColor: '#93c5fd',
+                textColor: '#e5e7eb',
+                primaryColor: '#0f172a',
+                primaryBorderColor: '#334155',
+                secondaryColor: '#111827',
+                tertiaryColor: '#0f172a',
+                edgeLabelBackground: '#0f172a',
+                noteBkgColor: '#0f172a',
+                noteBorderColor: '#334155'
+            } : {
+                background: '#f8fafc',
+                lineColor: '#334155', /* darker edges improve dashed contrast */
+                textColor: '#0f172a',
+                primaryColor: '#ffffff',
+                primaryBorderColor: '#cbd5e1',
+                secondaryColor: '#f3f4f6',
+                tertiaryColor: '#ffffff',
+                edgeLabelBackground: '#eef2f7', /* subtle label bg for readability */
+                noteBkgColor: '#fff',
+                noteBorderColor: '#cbd5e1'
+            },
+            packet: {
+                useMaxWidth: true,
+                diagramPadding: 8,
+                showBits: true
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
         }
-    });
-    
-    // Wait for DOM to be ready
+    }
+
+    // Initialize with current theme
+    mermaid.initialize(baseConfig());
+
+    // Expose a hook for theme changes
+    window.applyThemeToMermaid = function(){
+        try {
+            mermaid.initialize(baseConfig());
+            // Re-run rendering on existing diagrams
+            if (mermaid.run) {
+                mermaid.run({ querySelector: '.mermaid' });
+            } else if (mermaid.init) {
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            } else if (mermaid.contentLoaded) {
+                mermaid.contentLoaded();
+            }
+        } catch (e) {}
+    }
+
+    // Render when DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            mermaid.contentLoaded();
+            if (mermaid.contentLoaded) mermaid.contentLoaded();
         });
     }
 </script>
@@ -212,10 +256,38 @@
 <script nomodule src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script nomodule>
     if (window.mermaid) {
-        mermaid.initialize({ 
-            startOnLoad: true,
-            theme: 'default',
-            securityLevel: 'loose'
-        });
+        function isDark(){ return document.documentElement.classList.contains('dark'); }
+        function init(){
+            window.mermaid.initialize({ 
+                startOnLoad: true,
+                theme: isDark() ? 'dark' : 'default',
+                securityLevel: 'loose',
+                themeVariables: isDark() ? {
+                    background: '#0b1220',
+                    lineColor: '#93c5fd',
+                    textColor: '#e5e7eb',
+                    primaryColor: '#0f172a',
+                    primaryBorderColor: '#334155',
+                    secondaryColor: '#111827',
+                    tertiaryColor: '#0f172a',
+                    edgeLabelBackground: '#0f172a',
+                    noteBkgColor: '#0f172a',
+                    noteBorderColor: '#334155'
+                } : {
+                    background: '#f8fafc',
+                    lineColor: '#334155',
+                    textColor: '#0f172a',
+                    primaryColor: '#ffffff',
+                    primaryBorderColor: '#cbd5e1',
+                    secondaryColor: '#f3f4f6',
+                    tertiaryColor: '#ffffff',
+                    edgeLabelBackground: '#eef2f7',
+                    noteBkgColor: '#fff',
+                    noteBorderColor: '#cbd5e1'
+                }
+            });
+        }
+        init();
+        window.applyThemeToMermaid = function(){ init(); if (window.mermaid.init) window.mermaid.init(undefined, document.querySelectorAll('.mermaid')); };
     }
 </script>

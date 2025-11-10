@@ -1,0 +1,57 @@
+/* Light theme comfort tweaks */
+
+html:not(.dark) body {
+  background-color: #f8fafc; /* softer than pure white */
+  color: #0f172a; /* dark slate text */
+}
+
+html:not(.dark) .navbar-default {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
+}
+html:not(.dark) .navbar-custom .navbar-brand,
+html:not(.dark) .navbar-custom .nav li a,
+html:not(.dark) .navbar-default .navbar-brand,
+html:not(.dark) .navbar-default .navbar-nav>li>a {
+  color: #0f172a;
+}
+html:not(.dark) .navbar-custom .navbar-brand:hover,
+html:not(.dark) .navbar-custom .navbar-brand:focus,
+html:not(.dark) .navbar-custom .nav li a:hover,
+html:not(.dark) .navbar-custom .nav li a:focus,
+html:not(.dark) .navbar-default .navbar-brand:hover,
+html:not(.dark) .navbar-default .navbar-nav>li>a:hover {
+  color: #0085a1; /* brand primary */
+}
+html:not(.dark) .navbar-default .navbar-toggle {
+  border-color: #cbd5e1;
+}
+html:not(.dark) .navbar-default .navbar-toggle .icon-bar {
+  background-color: #0f172a;
+}
+
+html:not(.dark) .highlight pre,
+html:not(.dark) pre,
+html:not(.dark) .highlight .hll {
+  background-color: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+html:not(.dark) blockquote {
+  color: #334155;
+  border-left-color: #e5e7eb;
+}
+
+html:not(.dark) .table th,
+html:not(.dark) .table td {
+  border-color: #e5e7eb !important;
+}
+
+html:not(.dark) hr { border-color: #e5e7eb; }
+html:not(.dark) hr.small { border-color: #d1d5db; }
+
+/* Reading-lists TOC on light */
+html:not(.dark) .toc-container {
+  background: #f8f9fa;
+  border-color: #e0e0e0;
+}

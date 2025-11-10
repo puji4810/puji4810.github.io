@@ -1,0 +1,159 @@
+/* Dark theme overrides */
+
+/* Base */
+html.dark body {
+  background-color: #0b1220;
+  color: #e5e7eb;
+}
+
+html.dark a,
+html.dark .post-container a {
+  color: #93c5fd;
+}
+html.dark a:hover,
+html.dark a:focus,
+html.dark .post-container a:hover,
+html.dark .post-container a:focus {
+  color: #bfdbfe;
+}
+
+html.dark hr { border-color: #334155; }
+html.dark hr.small { border-color: #64748b; }
+
+/* Navbar */
+html.dark .navbar-default {
+  background-color: #0b1220;
+  border-color: #1f2937;
+}
+html.dark .navbar-default .navbar-brand,
+html.dark .navbar-default .navbar-nav>li>a {
+  color: #e5e7eb;
+}
+html.dark .navbar-default .navbar-brand:hover,
+html.dark .navbar-default .navbar-nav>li>a:hover {
+  color: #93c5fd;
+}
+html.dark .navbar-default .navbar-toggle .icon-bar {
+  background-color: #e5e7eb;
+}
+
+/* Footer */
+html.dark footer {
+  background: #0b1220;
+  color: #94a3b8;
+}
+html.dark footer .copyright.text-muted { color: #94a3b8; }
+html.dark footer .fa-circle { color: #334155; }
+
+/* Typography */
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #f1f5f9;
+}
+html.dark blockquote {
+  color: #cbd5e1;
+  border-left-color: #334155;
+}
+
+/* Reading-lists TOC on dark */
+html.dark .toc-container {
+  background: #111827;
+  border-color: #374151;
+}
+html.dark .toc-container h3 { color: #93c5fd; }
+html.dark .toc-container a { color: #93c5fd; }
+html.dark .toc-container a:hover { color: #bfdbfe; }
+
+/* Tables */
+html.dark .table th,
+html.dark .table td {
+  border-color: #374151 !important;
+}
+
+/* Code & Preformatted */
+html.dark .highlight pre,
+html.dark pre,
+html.dark .highlight .hll {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+html.dark code,
+html.dark pre code {
+  background-color: transparent;
+  color: #e2e8f0;
+}
+
+/* Syntax highlight token colors (Pygments GitHub theme overrides) */
+html.dark .highlight .c,  /* Comment */
+html.dark .highlight .cm,
+html.dark .highlight .c1,
+html.dark .highlight .cs { color: #94a3b8; font-style: italic; }
+html.dark .highlight .k,  /* Keywords */
+html.dark .highlight .kc,
+html.dark .highlight .kd,
+html.dark .highlight .kn,
+html.dark .highlight .kp,
+html.dark .highlight .kr,
+html.dark .highlight .kt { color: #93c5fd; font-weight: 600; }
+html.dark .highlight .o,  /* Operators */
+html.dark .highlight .ow { color: #f59e0b; font-weight: 600; }
+html.dark .highlight .n,  /* Names */
+html.dark .highlight .nn,
+html.dark .highlight .nl,
+html.dark .highlight .nx { color: #e5e7eb; }
+html.dark .highlight .nb { color: #a78bfa; }
+html.dark .highlight .nc { color: #fca5a5; }
+html.dark .highlight .no { color: #60a5fa; }
+html.dark .highlight .ni { color: #f472b6; }
+html.dark .highlight .ne,
+html.dark .highlight .nf { color: #22d3ee; font-weight: 600; }
+html.dark .highlight .nt { color: #60a5fa; }
+html.dark .highlight .nv,
+html.dark .highlight .vc,
+html.dark .highlight .vg,
+html.dark .highlight .vi { color: #f8fafc; }
+html.dark .highlight .m,
+html.dark .highlight .mf,
+html.dark .highlight .mh,
+html.dark .highlight .mi,
+html.dark .highlight .mo,
+html.dark .highlight .il { color: #f59e0b; }
+html.dark .highlight .s,
+html.dark .highlight .sb,
+html.dark .highlight .sc,
+html.dark .highlight .sd,
+html.dark .highlight .s1,
+html.dark .highlight .s2,
+html.dark .highlight .se,
+html.dark .highlight .sh,
+html.dark .highlight .si,
+html.dark .highlight .sx,
+html.dark .highlight .sr,
+html.dark .highlight .ss { color: #34d399; }
+html.dark .highlight .gd { color: #fecaca; background-color: #7f1d1d; }
+html.dark .highlight .gi { color: #bbf7d0; background-color: #14532d; }
+html.dark .highlight .gh { color: #cbd5e1; font-weight: 600; }
+html.dark .highlight .go { color: #9ca3af; }
+html.dark .highlight .gp { color: #94a3b8; }
+html.dark .highlight .w  { color: #64748b; }
+html.dark .highlight .err { color: #fecaca; background-color: #7f1d1d; }
+
+/* Inputs (if any) */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #0f172a;
+  color: #e5e7eb;
+  border-color: #334155;
+}
+
+/* Tag cloud default color range override, keep legible */
+html.dark #tag_cloud a { color: #93c5fd; }
+
+/* Mermaid container tweaks for dark mode */
+html.dark .mermaid { color-scheme: dark; }
