@@ -157,3 +157,9 @@ html.dark #tag_cloud a { color: #93c5fd; }
 
 /* Mermaid container tweaks for dark mode */
 html.dark .mermaid { color-scheme: dark; }
+
+/* Ensure code/ASCII art does not wrap; allow horizontal scroll */
+html.dark .highlight pre { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+html.dark .highlight pre code { white-space: pre !important; }
+html.dark pre code { white-space: pre !important; }
+html.dark .post-container pre { white-space: pre !important; overflow-x: auto; -webkit-overflow-scrolling: touch; }

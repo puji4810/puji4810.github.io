@@ -55,3 +55,9 @@ html:not(.dark) .toc-container {
   background: #f8f9fa;
   border-color: #e0e0e0;
 }
+
+/* Ensure code/ASCII art does not wrap; allow horizontal scroll */
+html:not(.dark) .highlight pre { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+html:not(.dark) .highlight pre code { white-space: pre !important; }
+html:not(.dark) pre code { white-space: pre !important; }
+html:not(.dark) .post-container pre { white-space: pre !important; overflow-x: auto; -webkit-overflow-scrolling: touch; }
