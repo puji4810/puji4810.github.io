@@ -80,11 +80,13 @@ html:not(.dark) .post-container pre { white-space: pre !important; overflow-x: a
 html:not(.dark) .highlight pre,
 html:not(.dark) pre {
   -webkit-overflow-scrolling: auto; /* avoid iOS capturing vertical scroll */
-  touch-action: pan-x;              /* allow horizontal scroll, bubble vertical */
+  touch-action: auto;
+  overscroll-behavior: contain;
 }
 html:not(.dark) .table-responsive {
   overflow-y: visible;              /* don't capture vertical scroll */
-  touch-action: pan-x;
+  touch-action: auto;
+  overscroll-behavior: contain;
 }
 
 /* Pinned badge */
@@ -121,39 +123,40 @@ html:not(.dark) .post-preview:hover {
   .reveal, .reveal.in { opacity: 1; transform: none; transition: none; }
 }
 
-/* Prevent hidden mobile menu from blocking content */
+/* Mobile menu floats as card */
 @media (max-width: 767px){
   #huxblog_navbar{
     position: fixed;
-    top: 60px;
+    top: 68px;
     right: 16px;
-    width: 220px;
+    width: 230px;
     max-width: calc(100% - 32px);
-    pointer-events: none;
-    visibility: hidden;
-    transform: translateY(-6px) scale(0.98);
-    transition: opacity .2s ease, transform .2s ease;
-    opacity: 0;
+    display: none;
     z-index: 1000;
   }
   #huxblog_navbar .navbar-collapse {
     display: block !important;
     overflow: hidden;
-    max-height: 0;
     background: rgba(255,255,255,0.98);
-    border-radius: 14px;
-    box-shadow: 0 15px 30px rgba(15,23,42,0.12);
-    border: 1px solid rgba(226,232,240,0.8);
+    border: 1px solid rgba(226,232,240,0.85);
+    border-radius: 16px;
+    box-shadow: 0 20px 35px rgba(15,23,42,0.18);
+    padding: 8px 12px;
   }
-  #huxblog_navbar .nav>li>a{ color: #0f172a; }
-  #huxblog_navbar .navbar-collapse .nav{ padding: 8px 12px; }
-  #huxblog_navbar.in{
-    pointer-events: auto;
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  #huxblog_navbar .nav>li>a {
+    color: #0f172a;
+    display: block;
+    padding: 8px 6px;
   }
-  #huxblog_navbar.in .navbar-collapse{ max-height: 500px; }
+  #huxblog_navbar.in {
+    display: block;
+    animation: navFloatIn .18s ease-out;
+  }
+}
+
+@keyframes navFloatIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 767px){

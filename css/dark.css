@@ -104,6 +104,33 @@ html.dark .navbar-default .navbar-toggle {
   html.dark #huxblog_navbar .navbar-collapse a:hover{ color: #bfdbfe; }
 }
 
+@media (max-width: 767px){
+  html.dark #huxblog_navbar{
+    position: fixed;
+    top: 68px;
+    right: 16px;
+    width: 230px;
+    max-width: calc(100% - 32px);
+    display: none;
+    z-index: 1000;
+  }
+  html.dark #huxblog_navbar .navbar-collapse{
+    display: block !important;
+    overflow: hidden;
+    background: rgba(15,23,42,0.95);
+    border: 1px solid rgba(51,65,85,0.9);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.55);
+    padding: 8px 12px;
+  }
+  html.dark #huxblog_navbar .nav>li>a{ color: #e2e8f0; display:block; padding:8px 6px; }
+  html.dark #huxblog_navbar.in{ display:block; animation: navFloatIn .18s ease-out; }
+}
+
+@media (max-width: 767px){
+  html.dark body{ -webkit-overflow-scrolling: touch; }
+}
+
 /* Footer */
 html.dark footer {
   background: #0b1220;
@@ -235,11 +262,13 @@ html.dark .post-container pre { white-space: pre !important; overflow-x: auto; -
 html.dark .highlight pre,
 html.dark pre {
   -webkit-overflow-scrolling: auto; /* avoid iOS capturing vertical scroll */
-  touch-action: pan-x;              /* allow horizontal scroll, bubble vertical */
+  touch-action: auto;
+  overscroll-behavior: contain;
 }
 html.dark .table-responsive {
   overflow-y: visible;              /* don't capture vertical scroll */
-  touch-action: pan-x;
+  touch-action: auto;
+  overscroll-behavior: contain;
 }
 
 /* Pinned badge */

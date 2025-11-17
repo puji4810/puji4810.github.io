@@ -46,35 +46,50 @@
     var $body   = document.body;
     var $toggle = document.querySelector('.navbar-toggle');
     var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
+    var $collapse = document.querySelector('#huxblog_navbar .navbar-collapse');
 
-    $toggle.addEventListener('click', handleMagic)
+    function isOpen(){ return $navbar.classList.contains('in'); }
     function openMenu(){
-        $collapse.style.height = "auto";
-        if ($navbar.className.indexOf('in') < 0) {
-            $navbar.className += " in";
-        }
+        if (!$navbar) return;
+        $navbar.classList.add('in');
+        if ($collapse) $collapse.style.height = 'auto';
     }
     function closeMenu(){
-        $navbar.className = $navbar.className.replace('in','').trim();
-        setTimeout(function(){ $collapse.style.height = "0px"; },200);
+        if (!$navbar) return;
+        $navbar.classList.remove('in');
+        if ($collapse) {
+            $collapse.style.height = '0px';
+        }
     }
     function handleMagic(e){
-        if ($navbar.className.indexOf('in') > -1) {
+        if (!$navbar) return;
+        if (isOpen()) {
             closeMenu();
         } else {
             openMenu();
         }
     }
+    if ($toggle) {
+        $toggle.addEventListener('click', function(e){
+            e.preventDefault();
+            handleMagic();
+        });
+    }
     // Close when tapping outside or hitting ESC
     document.addEventListener('click', function(evt){
         var target = evt.target;
-        if ($navbar.className.indexOf('in') > -1 && !$navbar.contains(target) && !$toggle.contains(target)) {
+        if (isOpen() && !$navbar.contains(target) && (!$toggle || !$toggle.contains(target))) {
             closeMenu();
         }
     });
     document.addEventListener('keyup', function(evt){ if (evt.key === 'Escape') closeMenu(); });
     window.addEventListener('resize', closeMenu);
+    if ($navbar) {
+        var navLinks = $navbar.querySelectorAll('a');
+        navLinks.forEach(function(link){
+            link.addEventListener('click', function(){ closeMenu(); });
+        });
+    }
     // Theme toggle
     (function(){
         var btn = document.getElementById('theme-toggle');
