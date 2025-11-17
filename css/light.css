@@ -89,6 +89,12 @@ html:not(.dark) .table-responsive {
   overscroll-behavior: contain;
 }
 
+/* Ensure page-level scroll只由浏览器控制，不让article自己滚动 */
+html:not(.dark) body > article {
+  overflow-y: visible !important;
+  overflow-x: visible;
+}
+
 /* Pinned badge */
 html:not(.dark) .pinned-badge {
   display: inline-block;
