@@ -49,30 +49,32 @@
     var $collapse = document.querySelector('.navbar-collapse');
 
     $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },300)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
+    function openMenu(){
+        $collapse.style.height = "auto";
+        if ($navbar.className.indexOf('in') < 0) {
             $navbar.className += " in";
         }
     }
-    // safety: ensure no leftover inline styles lock scroll
-    try { document.body.style.overflow = ''; } catch(e){}
-    window.addEventListener('resize', function(){
-        // close menu on resize to avoid stuck states
-        $navbar.className = " ";
-        $collapse.style.height = "0px";
-        try { document.body.style.overflow = ''; } catch(e){}
+    function closeMenu(){
+        $navbar.className = $navbar.className.replace('in','').trim();
+        setTimeout(function(){ $collapse.style.height = "0px"; },200);
+    }
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > -1) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+    // Close when tapping outside or hitting ESC
+    document.addEventListener('click', function(evt){
+        var target = evt.target;
+        if ($navbar.className.indexOf('in') > -1 && !$navbar.contains(target) && !$toggle.contains(target)) {
+            closeMenu();
+        }
     });
+    document.addEventListener('keyup', function(evt){ if (evt.key === 'Escape') closeMenu(); });
+    window.addEventListener('resize', closeMenu);
     // Theme toggle
     (function(){
         var btn = document.getElementById('theme-toggle');

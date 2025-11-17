@@ -22,12 +22,37 @@ html.dark html, html.dark body, html.dark .post-container, html.dark .container{
 
 /* Prevent hidden mobile menu from blocking content */
 @media (max-width: 767px){
-  html.dark #huxblog_navbar{ pointer-events: none; visibility: hidden; }
-  html.dark #huxblog_navbar .navbar-collapse{ overflow: hidden; }
-  html.dark #huxblog_navbar.in{ pointer-events: auto; visibility: visible; }
-  /* hard hide collapsed panel to avoid overlay */
-  html.dark #huxblog_navbar:not(.in) .navbar-collapse{ display: none !important; }
-  html.dark #huxblog_navbar.in .navbar-collapse{ display: block; }
+  html.dark #huxblog_navbar{
+    position: fixed;
+    top: 60px;
+    right: 16px;
+    width: 220px;
+    max-width: calc(100% - 32px);
+    pointer-events: none;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.98);
+    transition: opacity .2s ease, transform .2s ease;
+    opacity: 0;
+    z-index: 1000;
+  }
+  html.dark #huxblog_navbar .navbar-collapse {
+    display: block !important;
+    overflow: hidden;
+    max-height: 0;
+    background: rgba(15,23,42,0.95);
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.55);
+    border: 1px solid rgba(51,65,85,0.9);
+  }
+  html.dark #huxblog_navbar .nav>li>a{ color: #e2e8f0; }
+  html.dark #huxblog_navbar .navbar-collapse .nav{ padding: 8px 12px; }
+  html.dark #huxblog_navbar.in{
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  html.dark #huxblog_navbar.in .navbar-collapse{ max-height: 500px; }
 }
 
 @media (max-width: 767px){
@@ -210,11 +235,11 @@ html.dark .post-container pre { white-space: pre !important; overflow-x: auto; -
 html.dark .highlight pre,
 html.dark pre {
   -webkit-overflow-scrolling: auto; /* avoid iOS capturing vertical scroll */
-  touch-action: pan-y;              /* allow vertical gestures to bubble */
+  touch-action: pan-x;              /* allow horizontal scroll, bubble vertical */
 }
 html.dark .table-responsive {
   overflow-y: visible;              /* don't capture vertical scroll */
-  touch-action: pan-y;
+  touch-action: pan-x;
 }
 
 /* Pinned badge */

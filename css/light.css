@@ -80,11 +80,11 @@ html:not(.dark) .post-container pre { white-space: pre !important; overflow-x: a
 html:not(.dark) .highlight pre,
 html:not(.dark) pre {
   -webkit-overflow-scrolling: auto; /* avoid iOS capturing vertical scroll */
-  touch-action: pan-y;              /* allow vertical gestures to bubble */
+  touch-action: pan-x;              /* allow horizontal scroll, bubble vertical */
 }
 html:not(.dark) .table-responsive {
   overflow-y: visible;              /* don't capture vertical scroll */
-  touch-action: pan-y;
+  touch-action: pan-x;
 }
 
 /* Pinned badge */
@@ -123,15 +123,39 @@ html:not(.dark) .post-preview:hover {
 
 /* Prevent hidden mobile menu from blocking content */
 @media (max-width: 767px){
-  #huxblog_navbar{ pointer-events: none; visibility: hidden; }
-  #huxblog_navbar .navbar-collapse{ overflow: hidden; }
-  #huxblog_navbar.in{ pointer-events: auto; visibility: visible; }
-  /* hard hide collapsed panel to avoid overlay */
-  #huxblog_navbar:not(.in) .navbar-collapse{ display: none !important; }
-  #huxblog_navbar.in .navbar-collapse{ display: block; }
+  #huxblog_navbar{
+    position: fixed;
+    top: 60px;
+    right: 16px;
+    width: 220px;
+    max-width: calc(100% - 32px);
+    pointer-events: none;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.98);
+    transition: opacity .2s ease, transform .2s ease;
+    opacity: 0;
+    z-index: 1000;
+  }
+  #huxblog_navbar .navbar-collapse {
+    display: block !important;
+    overflow: hidden;
+    max-height: 0;
+    background: rgba(255,255,255,0.98);
+    border-radius: 14px;
+    box-shadow: 0 15px 30px rgba(15,23,42,0.12);
+    border: 1px solid rgba(226,232,240,0.8);
+  }
+  #huxblog_navbar .nav>li>a{ color: #0f172a; }
+  #huxblog_navbar .navbar-collapse .nav{ padding: 8px 12px; }
+  #huxblog_navbar.in{
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  #huxblog_navbar.in .navbar-collapse{ max-height: 500px; }
 }
 
-/* Avoid unexpected scroll locking by transformed elements */
 @media (max-width: 767px){
   body{ -webkit-overflow-scrolling: touch; }
 }
