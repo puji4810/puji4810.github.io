@@ -87,7 +87,7 @@ sticky: true
 ### 📚 Books（书籍）
 
 
-| 书名                                                                        | 作者                | 主题        |
+| 书名                                                                        | 作者                | 主题       |
 | --------------------------------------------------------------------------- | ------------------- | ---------- |
 | [设计数据密集型应用（第二版）](https://ddia.vonng.com/)                     | Martin Kleppmann    | 分布式系统 |
 | [深入理解计算机系统 (CSAPP)](https://csapp.cs.cmu.edu/)                     | Bryant & O'Hallaron | 计算机基础 |
@@ -100,13 +100,15 @@ sticky: true
 ### 📄 Papers（论文/资源）
 
 
-| 题目                                                                                                                                         | 来源                                | 主题        |
+| 题目                                                                                                                                         | 来源                                | 主题       |
 | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ---------- |
 | [Ilya Sutskever's Top 30 Reading List](https://aman.ai/primers/ai/top-30-papers/)                                                            | Aman.ai                             | AI/ML      |
 | [MIT 6.824: Distributed Systems](https://pdos.csail.mit.edu/6.824/schedule.html)                                                             | MIT                                 | 分布式系统 |
 | [MIT 6.081: Operating System Engineering](https://pdos.csail.mit.edu/6.828/2021/schedule.html)                                               | MIT PDOS Lab                        | 操作系统   |
 | [What Every Computer Scientist Should Know About Floating-Point Arithmetic](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html) | David Goldberg                      | 数值计算   |
 | [Memory Models Series](https://research.swtch.com/mm)                                                                                        | [Russ Cox](https://swtch.com/~rsc/) | 并发编程   |
+| [Optimizing software in C++](https://www.agner.org/optimize/optimizing_cpp.pdf)                                                              | [RAgner Fog](https://www.agner.org) | 程序优化   |
+| [Algorithms for Modern Hardware](https://en.algorithmica.org/hpc/)                                                                           | [Sergey Slotin](http://sereja.me/)  | 程序优化   |
 
 ---
 
@@ -127,10 +129,10 @@ sticky: true
 | [C++ Coroutine 系列](https://mysteriouspreserve.com/blog/2024/10/07/Cpp-Coroutine-Part-1/)                                                    | [萧叶轩](https://mysteriouspreserve.com/)            | C++ 协程   |
 | [Coroutine Theory & Practice](https://lewissbaker.github.io/)                                                                                 | Lewis Baker                                          | C++ 协程   |
 | [Jsonptr: Memory-Safe, Zero-Allocation JSON Decoder](https://nigeltao.github.io/blog/2020/jsonptr.html)                                       | Nigel Tao                                            | JSON 解析  |
-| [RocksDB Architecture Guide](https://github.com/facebook/rocksdb/wiki/RocksDB-Overview) | RocksDB | 架构设计 |
+| [RocksDB Architecture Guide](https://github.com/facebook/rocksdb/wiki/RocksDB-Overview)                                                       | RocksDB                                              | 架构设计   |
 
 ---
 
-**持续更新中... 最后更新: 2025-10-28**
+**持续更新中... 最后更新: 2025-11-20**
 
 <!-- more -->
