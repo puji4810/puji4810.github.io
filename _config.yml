@@ -37,6 +37,7 @@ plugins: [jekyll-paginate]
 markdown: kramdown
 kramdown:
   input: GFM # use Github Flavored Markdown !important
+  math_engine: mathjax
   hard_wrap: true
 
 # Disqus settings
