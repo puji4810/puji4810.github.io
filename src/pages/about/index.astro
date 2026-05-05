@@ -6,21 +6,64 @@ const description = "About the author.";
 ---
 
 <BaseLayout title={pageTitle} description={description}>
-  <main style="max-width: 800px; margin: 0 auto; padding: var(--spacing-6) var(--spacing-4);">
-    <header style="margin-bottom: var(--spacing-6);">
-      <h1 style="font-family: var(--font-serif); font-size: 3rem; margin: 0;">About</h1>
+  <main class="about-main">
+    <header class="about-header">
+      <h1>About</h1>
     </header>
 
-    <article style="font-family: var(--font-serif); font-size: 1.2rem; line-height: 1.8;">
-      <p>
-        Hi, I'm Puji. Welcome to my blog.
+    <article class="about-content">
+      <p class="about-lead">
+        Hi, I'm <strong>Puji</strong>. Welcome to my blog.
       </p>
       <p>
         I write about programming, distributed systems, software engineering, and things that interest me.
+        This site is a collection of my thoughts, learnings, and experiences — a quiet writing room bound in restraint.
       </p>
       <p>
-        This site is a collection of my thoughts, learnings, and experiences.
+        Every note is an argument. Every argument is a building block for new thought.
       </p>
     </article>
   </main>
 </BaseLayout>
+
+<style>
+  .about-main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: var(--spacing-8) var(--spacing-5);
+  }
+
+  .about-header {
+    margin-bottom: var(--spacing-8);
+    padding-bottom: var(--spacing-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .about-header h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .about-content {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--color-fg);
+  }
+
+  .about-content p {
+    margin: 0 0 var(--spacing-5) 0;
+  }
+
+  .about-lead {
+    font-size: var(--text-xl);
+    color: var(--color-fg);
+  }
+
+  .about-content strong {
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+</style>

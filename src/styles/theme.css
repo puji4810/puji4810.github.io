@@ -1,61 +1,170 @@
+/* ============================================
+   THEME SYSTEM — Editorial Magazine Aesthetic
+   Light: Warm ivory paper (Image 2 inspired)
+   Dark: Warm archive black (Image 1 inspired)
+   ============================================ */
+
 :root {
-  /* LIGHT MAGAZINE THEME (Default) */
-  --color-bg: #FDFCF8; /* Ivory paper */
-  --color-fg: #1A1A1A; /* Black typography */
-  --color-accent: #E65A30; /* Restrained orange accent (shared/adapted) */
-  --color-border: #E0DDD1;
-  --color-surface: #F5F3EC;
-  --font-serif: "Georgia", "Times New Roman", "Songti SC", "SimSun", serif;
-  --font-sans: "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Arial", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-mono: "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
-  --spacing-1: 0.25rem;
-  --spacing-2: 0.5rem;
-  --spacing-3: 1rem;
-  --spacing-4: 1.5rem;
-  --spacing-5: 2rem;
-  --spacing-6: 3rem;
-  --spacing-8: 4rem;
+  /* ---------- Fonts ---------- */
+  --font-display: "Cormorant Garamond", "Georgia", "Times New Roman", "Songti SC", "SimSun", serif;
+  --font-serif: "Source Serif 4", "Georgia", "Times New Roman", "Songti SC", "SimSun", serif;
+  --font-sans: "DM Sans", "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Arial", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "JetBrains Mono", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+
+  /* ---------- Light Theme — Warm Editorial Paper ---------- */
+  --color-bg:          #F5F0E8;
+  --color-bg-elevated: #EDE8E0;
+  --color-fg:          #1C1917;
+  --color-fg-muted:    #6B6560;
+  --color-fg-subtle:   #9B9590;
+  --color-accent:      #C25E3A;
+  --color-accent-hover: #A84D2D;
+  --color-border:      #D9D4CC;
+  --color-border-light: #E8E3DB;
+  --color-surface:     #EDE8E0;
+  --color-surface-hover: #E5E0D8;
+
+  /* ---------- Shadows ---------- */
+  --shadow-color: rgba(28, 25, 23, 0.06);
+  --shadow-sm: 0 1px 2px var(--shadow-color);
+  --shadow-md: 0 4px 12px var(--shadow-color);
+  --shadow-lg: 0 12px 32px var(--shadow-color);
+
+  /* ---------- Spacing ---------- */
+  --spacing-1: 0.25rem;   /* 4px */
+  --spacing-2: 0.5rem;    /* 8px */
+  --spacing-3: 0.75rem;   /* 12px */
+  --spacing-4: 1rem;      /* 16px */
+  --spacing-5: 1.5rem;    /* 24px */
+  --spacing-6: 2rem;      /* 32px */
+  --spacing-8: 3rem;      /* 48px */
+  --spacing-10: 4rem;     /* 64px */
+  --spacing-12: 5rem;     /* 80px */
+  --spacing-16: 6rem;     /* 96px */
+
+  /* ---------- Typography Scale ---------- */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.25rem;   /* 20px */
+  --text-2xl:  1.5rem;    /* 24px */
+  --text-3xl:  2rem;      /* 32px */
+  --text-4xl:  2.5rem;    /* 40px */
+  --text-5xl:  3.5rem;    /* 56px */
+  --text-6xl:  4.5rem;    /* 72px */
+
+  /* ---------- Line Heights ---------- */
+  --leading-tight:  1.1;
+  --leading-snug:   1.3;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.8;
+
+  /* ---------- Radii ---------- */
+  --radius-sm:  4px;
+  --radius-md:  8px;
   --radius-pill: 9999px;
-  --radius-sm: 4px;
+
+  /* ---------- Transitions ---------- */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* ---------- Z-Index ---------- */
+  --z-nav: 100;
 }
 
+/* ---------- Dark Theme — Warm Archive ---------- */
 html[data-theme="dark"] {
-  /* DARK ARCHIVE THEME */
-  --color-bg: #1C1B19; /* Warm black/brown */
-  --color-fg: #E8E6E1;
-  --color-accent: #D96941; /* Restrained orange */
-  --color-border: #3A3835;
-  --color-surface: #262422;
+  --color-bg:          #1C1B19;
+  --color-bg-elevated: #262422;
+  --color-fg:          #E8E6E1;
+  --color-fg-muted:    #9B9590;
+  --color-fg-subtle:   #6B6560;
+  --color-accent:      #D96941;
+  --color-accent-hover: #E5855C;
+  --color-border:      #3A3835;
+  --color-border-light: #2E2C29;
+  --color-surface:     #262422;
+  --color-surface-hover: #302E2B;
+
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px var(--shadow-color);
+  --shadow-md: 0 4px 16px var(--shadow-color);
+  --shadow-lg: 0 12px 40px var(--shadow-color);
+}
+
+/* ---------- Global Resets & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-serif);
-  line-height: 1.6;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
   margin: 0;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
+/* ---------- Headings ---------- */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   color: var(--color-fg);
+  line-height: var(--leading-tight);
+  margin: 0;
+  font-weight: 600;
 }
 
+/* ---------- Links ---------- */
 a {
   color: var(--color-accent);
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
 a:hover, a:focus {
+  color: var(--color-accent-hover);
   text-decoration: underline;
 }
 
+/* ---------- Focus ---------- */
 *:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
+/* ---------- Selection ---------- */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-fg-muted);
+}
+
+/* ---------- Reduced Motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

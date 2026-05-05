@@ -5,15 +5,12 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("posts");
 posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 
-// Group by Year -> Month
 const grouped = posts.reduce((acc, post) => {
   const date = post.data.publishedAt;
   const year = date.getUTCFullYear();
   const month = new Intl.DateTimeFormat("en-US", { month: "long", timeZone: "UTC" }).format(date);
-  
   if (!acc[year]) acc[year] = {};
   if (!acc[year][month]) acc[year][month] = [];
-  
   acc[year][month].push(post);
   return acc;
 }, {} as Record<number, Record<string, typeof posts>>);
@@ -25,36 +22,29 @@ const description = "All articles organized by date.";
 ---
 
 <BaseLayout title={pageTitle} description={description}>
-  <main style="max-width: 800px; margin: 0 auto; padding: var(--spacing-6) var(--spacing-4);">
-    <header style="margin-bottom: var(--spacing-6);">
-      <h1 style="font-family: var(--font-serif); font-size: 3rem; margin: 0;">Archive</h1>
-      <p style="font-family: var(--font-sans); font-size: 1.1rem; opacity: 0.8; margin-top: var(--spacing-2);">
-        {posts.length} articles across {years.length} years.
-      </p>
+  <main class="archive-main">
+    <header class="archive-header">
+      <h1>Archive</h1>
+      <p class="archive-meta">{posts.length} articles across {years.length} years.</p>
     </header>
 
-    <div style="display: flex; flex-direction: column; gap: var(--spacing-8);">
+    <div class="archive-content">
       {years.map(year => (
-        <section>
-          <h2 style="font-family: var(--font-sans); font-size: 2rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--spacing-2); margin-top: 0; margin-bottom: var(--spacing-4);">
-            {year}
-          </h2>
-          
-          <div style="display: flex; flex-direction: column; gap: var(--spacing-5);">
+        <section class="archive-year">
+          <h2 class="year-title">{year}</h2>
+          <div class="year-months">
             {Object.entries(grouped[year]).map(([month, monthPosts]) => (
-              <div>
-                <h3 style="font-family: var(--font-sans); font-size: 1.2rem; color: var(--color-accent); margin-top: 0; margin-bottom: var(--spacing-3);">
-                  {month}
-                </h3>
-                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--spacing-3);">
+              <div class="archive-month">
+                <h3 class="month-title">{month}</h3>
+                <ul class="month-posts">
                   {monthPosts.map(post => (
-                    <li style="display: flex; flex-direction: column; gap: var(--spacing-1);">
-                      <a href={post.data.targetUrl} style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-fg); text-decoration: none; font-weight: bold;">
+                    <li class="archive-post">
+                      <a href={post.data.targetUrl} class="archive-post-link">
                         {post.data.title}
                       </a>
-                      <div style="font-family: var(--font-sans); font-size: 0.9em; opacity: 0.7;">
+                      <time class="archive-post-date">
                         {new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short", timeZone: "UTC" }).format(post.data.publishedAt)}
-                      </div>
+                      </time>
                     </li>
                   ))}
                 </ul>
@@ -66,3 +56,120 @@ const description = "All articles organized by date.";
     </div>
   </main>
 </BaseLayout>
+
+<style>
+  .archive-main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-8) var(--spacing-5);
+  }
+
+  .archive-header {
+    margin-bottom: var(--spacing-10);
+    padding-bottom: var(--spacing-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .archive-header h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 600;
+    margin: 0 0 var(--spacing-3) 0;
+  }
+
+  .archive-meta {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+
+  .archive-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-10);
+  }
+
+  .archive-year {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+  }
+
+  .year-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    color: var(--color-fg);
+    margin: 0;
+    padding-bottom: var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .year-months {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+  }
+
+  .archive-month {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .month-title {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  .month-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .archive-post {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--spacing-4);
+    padding-bottom: var(--spacing-3);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .archive-post:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .archive-post-link {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-fg);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    flex: 1;
+  }
+
+  .archive-post-link:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .archive-post-date {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--color-fg-subtle);
+    white-space: nowrap;
+  }
+</style>

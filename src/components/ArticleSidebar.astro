@@ -14,7 +14,6 @@ interface Props {
 
 const { posts, currentUrl } = Astro.props;
 
-// Group posts by year
 const postsByYear = posts.reduce((acc, post) => {
   const year = post.data.publishedAt.getFullYear();
   if (!acc[year]) acc[year] = [];
@@ -24,9 +23,11 @@ const postsByYear = posts.reduce((acc, post) => {
 
 const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 ---
+
 <nav aria-label="Article navigation">
   <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-expanded="false" aria-controls="sidebar-nav-content">
-    ☰ Articles
+    <span class="toggle-icon">☰</span>
+    <span class="toggle-label">Articles</span>
   </button>
   <div id="sidebar-nav-content" class="layout-sidebar-content">
     <ul class="sidebar-list">
@@ -38,8 +39,8 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
               const isCurrent = post.data.targetUrl === currentUrl;
               return (
                 <li>
-                  <a 
-                    href={post.data.targetUrl} 
+                  <a
+                    href={post.data.targetUrl}
                     class={`sidebar-link ${isCurrent ? 'active' : ''}`}
                     aria-current={isCurrent ? 'page' : undefined}
                   >
@@ -56,39 +57,71 @@ const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 </nav>
 
 <style>
-  .sidebar-list, .sidebar-posts {
+  .sidebar-list,
+  .sidebar-posts {
     list-style: none;
     padding: 0;
     margin: 0;
   }
+
   .sidebar-year-group {
-    margin-bottom: var(--spacing-4);
+    margin-bottom: var(--spacing-5);
   }
+
+  .sidebar-year-group:last-child {
+    margin-bottom: 0;
+  }
+
   .sidebar-year {
     font-family: var(--font-sans);
-    font-weight: bold;
-    font-size: 0.9em;
-    color: var(--color-fg);
-    opacity: 0.7;
-    margin-bottom: var(--spacing-2);
-    letter-spacing: 0.05em;
+    font-weight: 600;
+    font-size: var(--text-xs);
+    color: var(--color-fg-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--spacing-3);
+    padding-bottom: var(--spacing-2);
+    border-bottom: 1px solid var(--color-border);
   }
+
+  .sidebar-posts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
   .sidebar-link {
     display: block;
     padding: var(--spacing-1) 0;
-    color: var(--color-fg);
+    color: var(--color-fg-muted);
     text-decoration: none;
     font-family: var(--font-sans);
-    font-size: 0.95em;
-    line-height: 1.4;
-    transition: color 0.2s;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    transition: color var(--transition-fast);
+    border-left: 2px solid transparent;
+    padding-left: var(--spacing-2);
+    margin-left: calc(-1 * var(--spacing-2));
   }
+
   .sidebar-link:hover {
     color: var(--color-accent);
+    text-decoration: none;
+    border-left-color: var(--color-border);
   }
+
   .sidebar-link.active {
     color: var(--color-accent);
-    font-weight: bold;
+    font-weight: 500;
+    border-left-color: var(--color-accent);
+  }
+
+  .toggle-icon {
+    font-size: var(--text-sm);
+  }
+
+  .toggle-label {
+    font-size: var(--text-sm);
   }
 </style>
 

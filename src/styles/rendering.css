@@ -1,65 +1,220 @@
 @import "katex/dist/katex.min.css";
-/* Override rendering.css defaults to use tokens */
+
+/* ============================================
+   RENDERING — Article typography & prose
+   ============================================ */
+
 .render-prose {
   font-family: var(--font-serif);
   color: var(--color-fg);
-  line-height: 1.8;
-  max-width: 65ch;
-  margin: 0 auto;
+  line-height: var(--leading-relaxed);
+  font-size: var(--text-lg);
 }
-.render-prose h1, .render-prose h2, .render-prose h3, .render-prose h4 {
-  font-family: var(--font-sans);
+
+/* Do NOT constrain max-width here — let layout.css handle container width */
+.render-prose > * {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* ---------- Headings ---------- */
+.render-prose h1,
+.render-prose h2,
+.render-prose h3,
+.render-prose h4,
+.render-prose h5,
+.render-prose h6 {
+  font-family: var(--font-display);
+  color: var(--color-fg);
+  line-height: var(--leading-snug);
   margin-top: 2em;
-  margin-bottom: 1em;
+  margin-bottom: 0.6em;
+  font-weight: 600;
 }
-.render-prose code {
-  font-family: var(--font-mono);
-  background: var(--color-surface);
-  padding: 0.1em 0.3em;
-  border-radius: var(--radius-sm);
-  font-size: 0.9em;
+
+.render-prose h1 {
+  font-size: var(--text-3xl);
 }
-.render-prose pre {
-  background: var(--color-surface);
-  padding: var(--spacing-3);
-  border-radius: var(--radius-sm);
-  overflow-x: auto;
+
+.render-prose h2 {
+  font-size: var(--text-2xl);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--color-border);
 }
-.render-prose pre code {
-  background: transparent;
-  padding: 0;
+
+.render-prose h3 {
+  font-size: var(--text-xl);
 }
+
+.render-prose h4 {
+  font-size: var(--text-lg);
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+/* ---------- Paragraphs ---------- */
+.render-prose p {
+  margin: 0 0 var(--spacing-5) 0;
+}
+
+/* ---------- Drop Cap ---------- */
+.render-prose > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.8;
+  padding-right: var(--spacing-2);
+  padding-top: 0.1em;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* ---------- Links ---------- */
 .render-prose a {
   color: var(--color-accent);
   text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+  transition: color var(--transition-fast);
 }
+
+.render-prose a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* ---------- Lists ---------- */
+.render-prose ul,
+.render-prose ol {
+  margin: 0 0 var(--spacing-5) 0;
+  padding-left: var(--spacing-6);
+}
+
+.render-prose li {
+  margin-bottom: var(--spacing-2);
+}
+
+.render-prose li::marker {
+  color: var(--color-fg-muted);
+}
+
+/* ---------- Blockquotes ---------- */
+.render-prose blockquote {
+  margin: var(--spacing-6) 0;
+  padding: var(--spacing-4) var(--spacing-6);
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-surface);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  color: var(--color-fg-muted);
+}
+
+.render-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Code ---------- */
+.render-prose code {
+  font-family: var(--font-mono);
+  background: var(--color-surface);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.85em;
+  color: var(--color-accent);
+}
+
+.render-prose pre {
+  background: var(--color-bg-elevated);
+  padding: var(--spacing-5);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--spacing-6) 0;
+  border: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.render-prose pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* ---------- Tables ---------- */
 .render-prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2em 0;
-}
-.render-prose th, .render-prose td {
+  margin: var(--spacing-6) 0;
+  font-size: var(--text-sm);
   border: 1px solid var(--color-border);
-  padding: var(--spacing-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
+
+.render-prose th,
+.render-prose td {
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+}
+
 .render-prose th {
+  background: var(--color-surface);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.render-prose tr:nth-child(even) {
   background: var(--color-surface);
 }
 
-/* KaTeX and math rendering support */
+/* ---------- Images ---------- */
+.render-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-6) 0;
+  display: block;
+}
 
+/* ---------- Horizontal Rule ---------- */
+.render-prose hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--spacing-8) 0;
+}
+
+/* ---------- Strong / Em ---------- */
+.render-prose strong {
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+.render-prose em {
+  font-style: italic;
+}
+
+/* ---------- KaTeX ---------- */
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
-  padding: var(--spacing-2) 0;
+  padding: var(--spacing-3) 0;
+  margin: var(--spacing-5) 0;
 }
 
-/* Mermaid rendering and fallback */
+/* ---------- Mermaid ---------- */
 .mermaid {
   display: flex;
   justify-content: center;
-  margin: var(--spacing-4) 0;
-  min-height: 100px; /* Provide space during render */
+  margin: var(--spacing-6) 0;
+  min-height: 100px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-border);
 }
 
 .mermaid svg {
@@ -68,12 +223,12 @@
 }
 
 .mermaid[data-mermaid-state="error"] {
-  border: 1px solid var(--color-border);
-  padding: var(--spacing-3);
+  border: 1px solid var(--color-accent);
+  padding: var(--spacing-4);
   color: var(--color-accent);
   background: var(--color-surface);
   font-family: var(--font-mono);
   white-space: pre-wrap;
-  font-size: 0.9em;
+  font-size: var(--text-sm);
   overflow-x: auto;
 }

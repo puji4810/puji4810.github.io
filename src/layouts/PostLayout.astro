@@ -49,14 +49,19 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
     <title>{title}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+
     <script is:inline set:html={themeScript}></script>
   </head>
   <body>
-    <header style="padding: var(--spacing-3) var(--spacing-4); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border); margin-bottom: var(--spacing-4);">
-      <div style="font-family: var(--font-sans); font-weight: bold;">
-        <a href="/" style="color: var(--color-fg); text-decoration: none;">Home</a>
+    <header class="post-page-header">
+      <div class="post-page-header-inner">
+        <a href="/" class="post-home-link">← Home</a>
+        <ThemeToggle />
       </div>
-      <ThemeToggle />
     </header>
 
     <div class="layout-container">
@@ -66,9 +71,9 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
 
       <main class="layout-content render-shell">
         <header class="render-header">
-          <p style="font-family: var(--font-sans); opacity: 0.7; margin-bottom: var(--spacing-2);">{formattedDate}</p>
-          <h1 style="margin-top: 0;">{title}</h1>
-          {subtitle && <p style="font-size: 1.2em; opacity: 0.8;">{subtitle}</p>}
+          <p class="post-date">{formattedDate}</p>
+          <h1>{title}</h1>
+          {subtitle && <p class="post-subtitle">{subtitle}</p>}
         </header>
         <article class="render-prose">
           <slot />
@@ -85,3 +90,47 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
     </script>
   </body>
 </html>
+
+<style>
+  .post-page-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    backdrop-filter: blur(8px);
+    background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    margin-bottom: var(--spacing-8);
+  }
+
+  .post-page-header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-4) var(--spacing-5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .post-home-link {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: color var(--transition-fast);
+  }
+
+  .post-home-link:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  @media (min-width: 768px) {
+    .post-page-header-inner {
+      padding: var(--spacing-4) var(--spacing-6);
+    }
+  }
+</style>

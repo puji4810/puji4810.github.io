@@ -16,6 +16,7 @@ if (filteredHeadings.length === 0) {
   return '';
 }
 ---
+
 <nav aria-label="Table of Contents" class="toc-nav">
   <div class="toc-title">On this page</div>
   <ul class="toc-list">
@@ -30,40 +31,54 @@ if (filteredHeadings.length === 0) {
 </nav>
 
 <style>
+  .toc-nav {
+    padding-top: var(--spacing-2);
+  }
+
   .toc-title {
     font-family: var(--font-sans);
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-bottom: var(--spacing-2);
-    letter-spacing: 0.05em;
-    opacity: 0.7;
+    font-weight: 600;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-fg-muted);
+    margin-bottom: var(--spacing-4);
+    padding-bottom: var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
   }
+
   .toc-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    border-left: 2px solid var(--color-border);
+    border-left: 1.5px solid var(--color-border);
   }
+
   .toc-item {
     margin-bottom: var(--spacing-1);
   }
+
   .toc-item.depth-3 {
     padding-left: var(--spacing-3);
   }
+
   .toc-link {
     display: block;
-    padding: var(--spacing-1) var(--spacing-2);
-    color: var(--color-fg);
+    padding: var(--spacing-1) var(--spacing-3);
+    color: var(--color-fg-muted);
     text-decoration: none;
     font-family: var(--font-sans);
-    font-size: 0.85em;
-    opacity: 0.8;
-    transition: all 0.2s;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    transition: all var(--transition-fast);
+    border-left: 1.5px solid transparent;
+    margin-left: -1.5px;
   }
-  .toc-link:hover, .toc-link:focus {
+
+  .toc-link:hover,
+  .toc-link:focus {
     color: var(--color-accent);
-    opacity: 1;
-    border-left: 2px solid var(--color-accent);
-    margin-left: -2px;
+    border-left-color: var(--color-accent);
+    text-decoration: none;
   }
 </style>

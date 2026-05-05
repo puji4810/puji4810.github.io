@@ -4,7 +4,6 @@ import { getCollection } from "astro:content";
 
 const posts = await getCollection("posts");
 
-// Group posts by tag
 const tagsMap = posts.reduce((acc, post) => {
   const tags = post.data.tags || [];
   tags.forEach(tag => {
@@ -14,7 +13,6 @@ const tagsMap = posts.reduce((acc, post) => {
   return acc;
 }, {} as Record<string, typeof posts>);
 
-// Sort tags alphabetically
 const sortedTags = Object.keys(tagsMap).sort((a, b) => a.localeCompare(b));
 
 const pageTitle = "Tags";
@@ -22,31 +20,27 @@ const description = "All tags from my articles.";
 ---
 
 <BaseLayout title={pageTitle} description={description}>
-  <main style="max-width: 800px; margin: 0 auto; padding: var(--spacing-6) var(--spacing-4);">
-    <header style="margin-bottom: var(--spacing-6);">
-      <h1 style="font-family: var(--font-serif); font-size: 3rem; margin: 0;">Tags</h1>
-      <p style="font-family: var(--font-sans); font-size: 1.1rem; opacity: 0.8; margin-top: var(--spacing-2);">
-        {sortedTags.length} topics explored.
-      </p>
+  <main class="tags-main">
+    <header class="tags-header">
+      <h1>Tags</h1>
+      <p class="tags-meta">{sortedTags.length} topics explored.</p>
     </header>
 
-    <div style="display: flex; flex-direction: column; gap: var(--spacing-8);">
+    <div class="tags-content">
       {sortedTags.map(tag => {
         const tagPosts = tagsMap[tag].sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
         return (
-          <section id={tag.toLowerCase().replace(/\s+/g, '-')}>
-            <h2 style="font-family: var(--font-sans); font-size: 2rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--spacing-2); margin-top: 0; margin-bottom: var(--spacing-4); color: var(--color-accent);">
-              #{tag}
-            </h2>
-            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--spacing-3);">
+          <section class="tag-section" id={tag.toLowerCase().replace(/\s+/g, '-')}>
+            <h2 class="tag-name">#{tag}</h2>
+            <ul class="tag-posts">
               {tagPosts.map(post => (
-                <li style="display: flex; flex-direction: column; gap: var(--spacing-1);">
-                  <a href={post.data.targetUrl} style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-fg); text-decoration: none; font-weight: bold;">
+                <li class="tag-post">
+                  <a href={post.data.targetUrl} class="tag-post-link">
                     {post.data.title}
                   </a>
-                  <div style="font-family: var(--font-sans); font-size: 0.9em; opacity: 0.7;">
+                  <time class="tag-post-date">
                     {new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(post.data.publishedAt)}
-                  </div>
+                  </time>
                 </li>
               ))}
             </ul>
@@ -56,3 +50,98 @@ const description = "All tags from my articles.";
     </div>
   </main>
 </BaseLayout>
+
+<style>
+  .tags-main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-8) var(--spacing-5);
+  }
+
+  .tags-header {
+    margin-bottom: var(--spacing-10);
+    padding-bottom: var(--spacing-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .tags-header h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    font-weight: 600;
+    margin: 0 0 var(--spacing-3) 0;
+  }
+
+  .tags-meta {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+
+  .tags-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-10);
+  }
+
+  .tag-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .tag-name {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--color-accent);
+    margin: 0;
+    padding-bottom: var(--spacing-3);
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .tag-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .tag-post {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--spacing-4);
+    padding-bottom: var(--spacing-3);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .tag-post:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .tag-post-link {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-fg);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    flex: 1;
+  }
+
+  .tag-post-link:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .tag-post-date {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--color-fg-subtle);
+    white-space: nowrap;
+  }
+</style>
