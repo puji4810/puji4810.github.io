@@ -8,7 +8,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-8);
-  max-width: 1400px;
+  max-width: none;
   margin: 0 auto;
   padding: 0 var(--spacing-5);
 }
@@ -26,9 +26,9 @@
 /* ---------- Tablet (>= 768px): Sidebar + Content ---------- */
 @media (min-width: 768px) {
   .layout-container {
-    grid-template-columns: 220px 1fr;
-    gap: var(--spacing-8);
-    padding: 0 var(--spacing-6);
+    grid-template-columns: 180px 1fr;
+    gap: var(--spacing-6);
+    padding: 0 var(--spacing-5);
   }
 
   .layout-sidebar {
@@ -37,16 +37,16 @@
     top: var(--spacing-6);
     max-height: calc(100vh - var(--spacing-6) * 2);
     overflow-y: auto;
-    padding-right: var(--spacing-4);
+    padding-right: var(--spacing-3);
   }
 }
 
 /* ---------- Desktop (>= 1200px): Sidebar + Content + TOC ---------- */
 @media (min-width: 1200px) {
   .layout-container {
-    grid-template-columns: 240px minmax(0, 1fr) 220px;
-    gap: var(--spacing-10);
-    padding: 0 var(--spacing-8);
+    grid-template-columns: 200px minmax(0, 1fr) 180px;
+    gap: var(--spacing-8);
+    padding: 0 var(--spacing-6);
   }
 
   .layout-toc {
@@ -55,16 +55,16 @@
     top: var(--spacing-6);
     max-height: calc(100vh - var(--spacing-6) * 2);
     overflow-y: auto;
-    padding-left: var(--spacing-4);
+    padding-left: var(--spacing-3);
   }
 }
 
 /* ---------- Wide Desktop (>= 1400px): generous spacing ---------- */
-@media (min-width: 1400px) {
+@media (min-width: 1600px) {
   .layout-container {
-    grid-template-columns: 260px minmax(0, 1fr) 240px;
-    gap: var(--spacing-12);
-    padding: 0 var(--spacing-10);
+    grid-template-columns: 220px minmax(0, 1fr) 200px;
+    gap: var(--spacing-10);
+    padding: 0 var(--spacing-8);
   }
 }
 

@@ -15,17 +15,17 @@ const description = "Puji's Blog: Programming, systems, and design.";
 <BaseLayout title={pageTitle} description={description}>
   <main class="home-main">
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero animate-fade-up">
       <div class="hero-inner">
-        <p class="hero-eyebrow">Volume I — A Manual for Thought</p>
-        <h1 class="hero-title">
+        <p class="hero-eyebrow animate-fade-up delay-1">Volume I — A Manual for Thought</p>
+        <h1 class="hero-title animate-fade-up delay-2">
           Notes that <em>think</em><br />back at you.
         </h1>
-        <p class="hero-description">
+        <p class="hero-description animate-fade-up delay-3">
           A quiet writing room for the long-form thinker — a second brain bound in restraint.
           Programming, distributed systems, and things that interest me.
         </p>
-        <div class="hero-actions">
+        <div class="hero-actions animate-fade-up delay-4">
           <a href="/archive/" class="btn btn-primary">Begin reading</a>
           <a href="/about/" class="btn btn-ghost">About this site</a>
         </div>
@@ -34,7 +34,7 @@ const description = "Puji's Blog: Programming, systems, and design.";
 
     <!-- Featured Post -->
     {featuredPost && (
-      <section class="featured">
+      <section class="featured animate-fade-up delay-2">
         <div class="featured-inner">
           <span class="featured-label">Featured</span>
           <a href={featuredPost.data.targetUrl} class="featured-link">
@@ -54,8 +54,8 @@ const description = "Puji's Blog: Programming, systems, and design.";
     <!-- Post Grid -->
     <section class="post-grid">
       {otherPosts.map(post => (
-        <article class="post-card">
-          <time class="post-card-date">
+         <article class="post-card card-hover animate-fade-up">
+           <time class="post-card-date">
             {new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(post.data.publishedAt)}
           </time>
           <a href={post.data.targetUrl} class="post-card-link">
