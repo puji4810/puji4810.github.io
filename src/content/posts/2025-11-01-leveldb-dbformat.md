@@ -23,7 +23,7 @@ routeSlug: "LevelDB-DBformat"
 
 LevelDB uses **InternalKey** instead of raw user keys to support MVCC (Multi-Version Concurrency Control) and snapshots.
 
-<div class="mermaid">
+```mermaid
 ---
 config:
   packet:
@@ -33,7 +33,7 @@ packet-beta
 0-255: "user_key: bytes[user_key_len]"
 256-319: "sequence: uint56 (bits 8-63)"
 320-327: "type: uint8 (bits 0-7)"
-</div>
+```
 
 
 ```plaintext
@@ -73,7 +73,7 @@ InternalKey comparison follows these rules (in order):
 
 `LookupKey` is used for querying in MemTable. It encodes the search target.
 
-<div class="mermaid">
+```mermaid
 ---
 config:
   packet:
@@ -83,7 +83,7 @@ packet-beta
 0-31: "internal_key_len: varint32"
 32-255: "user_key: bytes[user_key_len]"
 256-319: "tag: uint64 (seq << 8 | type)"
-</div>
+```
 
 ```plaintext
 LookupKey Layout:

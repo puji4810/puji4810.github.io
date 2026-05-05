@@ -18,7 +18,7 @@ routeSlug: "LevelDB-Logformat"
 
 <!-- more -->
 
-<div class="mermaid">
+```mermaid
 ---
 config:
   packet:
@@ -30,7 +30,7 @@ packet-beta
 32-47: "length (uint16)"
 48-55: "type (uint8)"
 56-255: "data[0..length-1]"
-</div>
+```
 
 
 ```plaintext

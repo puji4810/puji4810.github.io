@@ -19,7 +19,7 @@ summary: "并发编程的复杂性往往源于对执行顺序的误解。本文�
 
 论文的核心贡献是一个看似简单的概念：**happens-before**（先发生于）。并发执行可以被建模为事件图，其中节点是操作，边是因果关系。本文的核心观点是：并发往往存在于那些“缺失的边”之中，而通过显式地补齐这些边，我们可以更清晰地理解数据竞争与结构化并发。
 
-<div class="mermaid">
+```mermaid
 graph LR
     subgraph NodeTypes["节点类型"]
         R(("R: 读"))
@@ -35,7 +35,7 @@ graph LR
         C(("c")) -.->|"synchronizes-with"| D(("d"))
         E(("e")) ==>|"spawn/join"| F(("f"))
     end
-</div>
+```
 
 <!-- more -->
 
@@ -68,7 +68,7 @@ graph LR
 
 以经典的 Message Passing (MP) 模型为例，如下方的 Mermaid 图 (D2) 所示。如果缺失了从 P1 的 `send` 到 P2 的 `recv` 这条虚线边，那么 P1 的数据准备（a, b）与 P2 的数据使用（d, e）之间就没有任何 Happens-Before 路径。这种边的缺失直接导致了并发访问冲突，即我们常说的数据竞争（Data Race）。
 
-<div class="mermaid">
+```mermaid
 graph TB
     subgraph P1["进程 P1"]
         direction TB
@@ -79,7 +79,7 @@ graph TB
         a2(("recv")) --> b2(("d")) --> c2(("e"))
     end
     c1 -.->|"消息"| a2
-</div>
+```
 
 ## 时钟条件与逻辑时钟
 
@@ -119,7 +119,7 @@ Lamport 给出了一套简单的规则来维护这个计数器：
 
 在这种模型下，即使两个线程在同一个物理内存上操作，缺失了显式同步也可能打破直觉。例如，线程 2 可能会先观察到 `flag` 的更新，却读到 `data` 的旧值。这在事件图的角度来看，就是因为 `W(data)` 到 `R(data)` 之间缺失了一条关键的因果边。
 
-<div class="mermaid">
+```mermaid
 graph TD
     subgraph T1["线程 1"]
         direction TB
@@ -134,7 +134,7 @@ graph TD
     r1 -->|"程序序"| r2
     w1 ~~~ r2
     linkStyle 5 stroke:red,stroke-width:2px,stroke-dasharray:5
-</div>
+```
 
 ### C++ 内存模型：补齐缺失的边
 

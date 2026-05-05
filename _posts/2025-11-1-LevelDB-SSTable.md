@@ -20,7 +20,7 @@ SSTable (Sorted String Table) is the on-disk storage format for Prism. It stores
 
 ## File Layout
 
-<div class="mermaid">
+```mermaid
 graph TB
     subgraph SSTable File
         DB1[Data Block 1]
@@ -46,7 +46,7 @@ graph TB
     style MIB fill:#4ECDC4,stroke:#333,stroke-width:2px,color:#000
     style MB1 fill:#95E1D3,stroke:#333,stroke-width:2px,color:#000
     style MBK fill:#95E1D3,stroke:#333,stroke-width:2px,color:#000
-</div>
+```
 
 
 **Structure:**
@@ -95,7 +95,7 @@ Data blocks store sorted key-value pairs with prefix compression.
 
 ### Block Structure
 
-<div class="mermaid">
+```mermaid
 graph LR
     subgraph Data Block
         R1[Record 1<br/>shared=0]
@@ -115,7 +115,7 @@ graph LR
     style R1 fill:#2ECC71,stroke:#333,color:#000
     style RA fill:#FF6B6B,stroke:#333,color:#000
     style RC fill:#FF6B6B,stroke:#333,color:#000
-</div>
+```
 
 
 ### Entry Encoding
@@ -172,7 +172,7 @@ Block Trailer := compression_type (1 byte)
 
 The index block maps keys to data block locations.
 
-<div class="mermaid">
+```mermaid
 graph TB
     subgraph Index Block
         E1["Key: separator1<br/>Value: BlockHandle1"]
@@ -192,7 +192,7 @@ graph TB
     E1 -.-> DB1
     E2 -.-> DB2
     EN -.-> DBN
-</div>
+```
 
 
 **Index Entry:**
@@ -306,7 +306,7 @@ Block Trailer: compression_type | crc32c
 
 To clarify the three main block types and their relationships:
 
-<div class="mermaid">
+```mermaid
 graph TB
     subgraph Data_Layer["Data Layer"]
         DB1["Data Block 1<br/>(KV pairs)"]
@@ -338,7 +338,7 @@ graph TB
     style MB1 fill:#F39C12,stroke:#333,stroke-width:2px,color:#000
     style MB2 fill:#F39C12,stroke:#333,stroke-width:2px,color:#000
     style MIB fill:#FF6B6B,stroke:#333,stroke-width:2px,color:#000
-</div>
+```
 
 
 ### Detailed Comparison
@@ -449,7 +449,7 @@ Footer := metaindex_handle (varint64 offset | varint64 size, padded to 20 bytes)
 
 ## Building an SSTable
 
-<div class="mermaid">
+```mermaid
 sequenceDiagram
     participant TB as TableBuilder
     participant DBB as DataBlockBuilder
@@ -479,7 +479,7 @@ sequenceDiagram
     TB->>IBB: Finish()
     TB->>File: Write index block + trailer
     TB->>File: Write footer (48 bytes)
-</div>
+```
 
 
 **Key steps:**
@@ -496,7 +496,7 @@ sequenceDiagram
 
 ## Reading from SSTable
 
-<div class="mermaid">
+```mermaid
 sequenceDiagram
     participant C as Client
     participant T as Table
@@ -530,7 +530,7 @@ sequenceDiagram
     else Key not found
         T->>C: NotFound
     end
-</div>
+```
 
 
 **Two-level lookup:**
@@ -544,7 +544,7 @@ sequenceDiagram
 
 ### Two-Level Iterator
 
-<div class="mermaid">
+```mermaid
 graph TB
     subgraph TwoLevelIterator
         Index[Index Block Iterator<br/>outer]
@@ -558,7 +558,7 @@ graph TB
         S --> Index
         Index --> Data
     end
-</div>
+```
 
 
 **Algorithm:**
@@ -684,7 +684,7 @@ Get("foo", snapshot_seq=35) → NotFound (sees deletion at seq=30)
 
 ## TableCache (Future)
 
-<div class="mermaid">
+```mermaid
 graph LR
     subgraph TableCache
         LRU[LRU Cache]
@@ -700,7 +700,7 @@ graph LR
     H1 --> T1[Table 1<br/>index in memory]
     H2 --> T2[Table 2<br/>index in memory]
     HN --> TN[Table N<br/>index in memory]
-</div>
+```
 
 
 **Purpose:**
@@ -717,7 +717,7 @@ graph LR
 
 ### Minor Compaction (MemTable → SSTable)
 
-<div class="mermaid">
+```mermaid
 sequenceDiagram
     participant DB as DBImpl
     participant Mem as MemTable
@@ -738,12 +738,12 @@ sequenceDiagram
     TB->>File: Finish() → Write blocks, index, footer
     DB->>DB: Update version (add new L0 file)
     DB->>Imm: Unref() → delete
-</div>
+```
 
 
 ### Read Path
 
-<div class="mermaid">
+```mermaid
 graph TB
     Start[DBImpl::Get]
     Mem{Check mem_}
@@ -764,7 +764,7 @@ graph TB
     
     style Return fill:#2ECC71,stroke:#333,stroke-width:2px,color:#000
     style NotFound fill:#FF6B6B,stroke:#333,stroke-width:2px,color:#000
-</div>
+```
 
 
 **Search order:**

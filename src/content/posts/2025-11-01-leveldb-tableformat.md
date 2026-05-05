@@ -17,7 +17,7 @@ routeSlug: "LevelDB-Tableformat"
 ---
 
 <!-- more -->
-<div class="mermaid">
+```mermaid
 ---
 config:
   packet:
@@ -27,9 +27,9 @@ packet-beta
 0-63: "sequence: fixed64"
 64-95: "count: fixed32"
 96-255: "data: record[count]"
-</div>
+```
 
-<div class="mermaid">
+```mermaid
 ---
 config:
   packet:
@@ -41,9 +41,9 @@ packet-beta
 16-47: "key_data: uint8[key_len]"
 48-55: "value_len: varint32"
 56-87: "value_data: uint8[value_len]"
-</div>
+```
 
-<div class="mermaid">
+```mermaid
 ---
 config:
   packet:
@@ -53,7 +53,7 @@ packet-beta
 0-7: "type: kTypeDeletion"
 8-15: "key_len: varint32"
 16-47: "key_data: uint8[key_len]"
-</div>
+```
 
 
 

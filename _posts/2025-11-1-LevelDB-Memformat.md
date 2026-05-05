@@ -26,7 +26,7 @@ MemTable is an in-memory write buffer that:
 
 <!-- more -->
 
-<div class="mermaid">
+```mermaid
 graph TB
     subgraph MemTable["MemTable"]
         A["Arena (memory pool)"]
@@ -55,7 +55,7 @@ graph TB
     style E1 fill:#95E1D3,stroke:#333
     style E2 fill:#95E1D3,stroke:#333
     style E3 fill:#95E1D3,stroke:#333
-</div>
+```
 
 ---
 
@@ -63,7 +63,7 @@ graph TB
 
 Each entry in MemTable is encoded as a single byte array allocated from Arena.
 
-<div class="mermaid">
+```mermaid
 ---
 config:
   packet:
@@ -75,7 +75,7 @@ packet-beta
 256-319: "tag: uint64 (seq << 8 | type)"
 320-351: "value_len: varint32"
 352-511: "value: bytes[value_len]"
-</div>
+```
 
 
 ```plaintext

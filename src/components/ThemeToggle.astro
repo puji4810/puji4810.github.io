@@ -34,6 +34,7 @@
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.dataset.theme = next;
       localStorage.setItem('theme', next);
+      window.dispatchEvent(new Event('render-theme-change'));
     });
   }
   

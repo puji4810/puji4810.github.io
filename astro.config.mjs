@@ -5,7 +5,7 @@ import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-import remarkLegacyMermaid from "./src/markdown/remark-legacy-mermaid.mjs";
+import remarkMermaidCode from "./src/markdown/remark-mermaid-code.mjs";
 import remarkMath from "remark-math";
 
 export default defineConfig({
@@ -14,7 +14,7 @@ export default defineConfig({
   output: "static",
   integrations: [sitemap()],
   markdown: {
-    remarkPlugins: [remarkGfm, remarkLegacyMermaid, remarkMath],
+    remarkPlugins: [remarkGfm, remarkMermaidCode, remarkMath],
     rehypePlugins: [
       rehypeRaw,
       rehypeSlug,
