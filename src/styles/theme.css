@@ -336,6 +336,12 @@ html[data-theme="dark"] .geo-shape {
   50% { transform: scale(1.2) rotate(45deg); opacity: 0.1; }
 }
 
+@media (max-width: 767px) {
+  .geo-bg {
+    display: none;
+  }
+}
+
 /* ============================================
    SLASH CURTAIN — Page transition animation
    ============================================ */
