@@ -17,76 +17,11 @@ routeSlug: "Reading-lists"
 
 > "如果你发现你几乎把所有的时间都花在了理论上，那就开始把一些注意力转向实际的东西；这会提高你的理论水平。" —— 高德纳
 
-<style>
-  .toc-container {
-    background: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 30px 0;
-  }
-  
-  .toc-container h3 {
-    margin-top: 0;
-    color: #0085a1;
-  }
-  
-  .toc-container ul {
-    margin: 0;
-    padding-left: 20px;
-  }
-  
-  .toc-container > ul > li {
-    margin: 8px 0;
-  }
-  
-  .toc-container a {
-    color: #337ab7;
-    text-decoration: none;
-  }
-  
-  .toc-container a:hover {
-    color: #0085a1;
-    text-decoration: underline;
-  }
-  
-  .toc-container ul ul {
-    margin-top: 5px;
-  }
-  
-  .section-anchor {
-    display: block;
-    height: 60px;
-    margin-top: -60px;
-    visibility: hidden;
-  }
-</style>
-
-## 📖 目录导航
-
-<div class="toc-container">
-
-<h3>快速导航</h3>
-
-<ul>
-<li><strong><a href="#reading-list">📝 清单</a></strong>
-<ul>
-<li><a href="#wishlist-tech">📚 Books（书籍）</a></li>
-<li><a href="#wishlist-papers">📄 Papers（论文）</a></li>
-<li><a href="#wishlist-blogs">📝 Blogs（博客）</a></li>
-</ul>
-</li>
-</ul>
-
-</div>
-
 ---
 
-<span class="section-anchor" id="reading-list"></span>
 
-## 📝 清单
+## 清单
 
-<span class="section-anchor" id="wishlist-tech"></span>
 
 ### 📚 Books（书籍）
 
@@ -98,9 +33,8 @@ routeSlug: "Reading-lists"
 
 ---
 
-<span class="section-anchor" id="wishlist-papers"></span>
 
-### 📄 Papers（论文/资源）
+### Papers（论文/资源）
 
 | 题目                                                                                                                                         | 来源                                | 主题       |
 | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ---------- |
@@ -114,9 +48,8 @@ routeSlug: "Reading-lists"
 
 ---
 
-<span class="section-anchor" id="wishlist-blogs"></span>
 
-### 📝 Blogs（博客文章）
+### Blogs（博客文章）
 
 | 标题                                                                                                                                          | 作者/来源                                            | 主题       |
 | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------- |
