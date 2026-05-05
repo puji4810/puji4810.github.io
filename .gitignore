@@ -1,0 +1,9 @@
+_site
+node_modules
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+*.sh
+.bundle
+.jekyll-cache
+vendor

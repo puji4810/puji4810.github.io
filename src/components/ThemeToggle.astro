@@ -1,0 +1,43 @@
+---
+---
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+  <span class="theme-icon light-icon" aria-hidden="true">☼</span>
+  <span class="theme-icon dark-icon" aria-hidden="true">☾</span>
+</button>
+
+<style>
+  .theme-toggle {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-fg);
+    border-radius: var(--radius-pill);
+    padding: var(--spacing-1) var(--spacing-2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-1);
+    font-size: 1.2rem;
+  }
+  
+  html[data-theme="light"] .light-icon { display: none; }
+  html[data-theme="dark"] .dark-icon { display: none; }
+</style>
+
+<script>
+  function setupThemeToggle() {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+    
+    toggle.addEventListener('click', () => {
+      const current = document.documentElement.dataset.theme;
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    });
+  }
+  
+  setupThemeToggle();
+  // Ensure it works on view transitions if we use them later
+  document.addEventListener('astro:after-swap', setupThemeToggle);
+</script>

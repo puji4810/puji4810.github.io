@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+// Sort newest first
+posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const featuredPost = posts.find(p => p.data.featured);
+const otherPosts = posts.filter(p => !p.data.featured);
+
+const pageTitle = "Home";
+const description = "Puji's Blog: Programming, systems, and design.";
+---
+
+<BaseLayout title={pageTitle} description={description}>
+  <main style="max-width: 1000px; margin: 0 auto; padding: var(--spacing-6) var(--spacing-4);">
+    <div style="margin-bottom: var(--spacing-8); display: grid; gap: var(--spacing-4); grid-template-columns: 1fr;">
+      {featuredPost && (
+        <article style="border: 2px solid var(--color-border); padding: var(--spacing-5); background: var(--color-surface); display: flex; flex-direction: column; gap: var(--spacing-2);">
+          <div style="font-family: var(--font-sans); font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-accent); font-weight: bold;">
+            Featured
+          </div>
+          <h2 style="font-family: var(--font-serif); font-size: 2.5rem; margin: 0; line-height: 1.1;">
+            <a href={featuredPost.data.targetUrl} style="color: var(--color-fg); text-decoration: none;">
+              {featuredPost.data.title}
+            </a>
+          </h2>
+          {featuredPost.data.subtitle && <p style="font-family: var(--font-serif); font-size: 1.25rem; margin: 0; opacity: 0.8;">{featuredPost.data.subtitle}</p>}
+          <p style="font-family: var(--font-sans); margin-top: var(--spacing-3);">{featuredPost.data.summary}</p>
+          <div style="font-family: var(--font-sans); font-size: 0.9em; opacity: 0.6; margin-top: auto; padding-top: var(--spacing-3);">
+            {new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(featuredPost.data.publishedAt)}
+          </div>
+        </article>
+      )}
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--spacing-6);">
+      {otherPosts.map(post => (
+        <article style="display: flex; flex-direction: column; gap: var(--spacing-2); border-top: 1px solid var(--color-border); padding-top: var(--spacing-3);">
+          <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin: 0; line-height: 1.2;">
+            <a href={post.data.targetUrl} style="color: var(--color-fg); text-decoration: none;">
+              {post.data.title}
+            </a>
+          </h3>
+          <div style="font-family: var(--font-sans); font-size: 0.85em; opacity: 0.6;">
+            {new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(post.data.publishedAt)}
+          </div>
+          <p style="font-family: var(--font-sans); font-size: 0.95em; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+            {post.data.summary}
+          </p>
+        </article>
+      ))}
+    </div>
+  </main>
+</BaseLayout>

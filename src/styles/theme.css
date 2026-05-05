@@ -1,0 +1,66 @@
+:root {
+  /* LIGHT MAGAZINE THEME (Default) */
+  --color-bg: #FDFCF8; /* Ivory paper */
+  --color-fg: #1A1A1A; /* Black typography */
+  --color-accent: #E65A30; /* Restrained orange accent (shared/adapted) */
+  --color-border: #E0DDD1;
+  --color-surface: #F5F3EC;
+  --font-serif: "Georgia", "Times New Roman", "Songti SC", "SimSun", serif;
+  --font-sans: "-apple-system", "BlinkMacSystemFont", "Helvetica Neue", "Arial", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 1rem;
+  --spacing-4: 1.5rem;
+  --spacing-5: 2rem;
+  --spacing-6: 3rem;
+  --spacing-8: 4rem;
+  --radius-pill: 9999px;
+  --radius-sm: 4px;
+}
+
+html[data-theme="dark"] {
+  /* DARK ARCHIVE THEME */
+  --color-bg: #1C1B19; /* Warm black/brown */
+  --color-fg: #E8E6E1;
+  --color-accent: #D96941; /* Restrained orange */
+  --color-border: #3A3835;
+  --color-surface: #262422;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-serif);
+  line-height: 1.6;
+  margin: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--color-fg);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover, a:focus {
+  text-decoration: underline;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

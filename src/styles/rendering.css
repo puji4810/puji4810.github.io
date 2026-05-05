@@ -1,0 +1,79 @@
+@import "katex/dist/katex.min.css";
+/* Override rendering.css defaults to use tokens */
+.render-prose {
+  font-family: var(--font-serif);
+  color: var(--color-fg);
+  line-height: 1.8;
+  max-width: 65ch;
+  margin: 0 auto;
+}
+.render-prose h1, .render-prose h2, .render-prose h3, .render-prose h4 {
+  font-family: var(--font-sans);
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+.render-prose code {
+  font-family: var(--font-mono);
+  background: var(--color-surface);
+  padding: 0.1em 0.3em;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+.render-prose pre {
+  background: var(--color-surface);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+.render-prose pre code {
+  background: transparent;
+  padding: 0;
+}
+.render-prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+.render-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+}
+.render-prose th, .render-prose td {
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-2);
+}
+.render-prose th {
+  background: var(--color-surface);
+}
+
+/* KaTeX and math rendering support */
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--spacing-2) 0;
+}
+
+/* Mermaid rendering and fallback */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-4) 0;
+  min-height: 100px; /* Provide space during render */
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid[data-mermaid-state="error"] {
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-3);
+  color: var(--color-accent);
+  background: var(--color-surface);
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  font-size: 0.9em;
+  overflow-x: auto;
+}

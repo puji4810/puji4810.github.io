@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle = "About";
+const description = "About the author.";
+---
+
+<BaseLayout title={pageTitle} description={description}>
+  <main style="max-width: 800px; margin: 0 auto; padding: var(--spacing-6) var(--spacing-4);">
+    <header style="margin-bottom: var(--spacing-6);">
+      <h1 style="font-family: var(--font-serif); font-size: 3rem; margin: 0;">About</h1>
+    </header>
+
+    <article style="font-family: var(--font-serif); font-size: 1.2rem; line-height: 1.8;">
+      <p>
+        Hi, I'm Puji. Welcome to my blog.
+      </p>
+      <p>
+        I write about programming, distributed systems, software engineering, and things that interest me.
+      </p>
+      <p>
+        This site is a collection of my thoughts, learnings, and experiences.
+      </p>
+    </article>
+  </main>
+</BaseLayout>

@@ -1,0 +1,42 @@
+---
+import "../styles/theme.css";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "A blog" } = Astro.props;
+// Read inline script to avoid additional network request blocking rendering
+const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-boot.js'), 'utf-8');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+    <title>{title}</title>
+    <script is:inline set:html={themeScript}></script>
+  </head>
+  <body>
+    <header style="padding: var(--spacing-3); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border);">
+      <div style="display: flex; align-items: center; gap: var(--spacing-4);">
+        <div class="brand" style="font-family: var(--font-sans); font-weight: bold;">
+          <a href="/" style="color: var(--color-fg); text-decoration: none;">Blog</a>
+        </div>
+        <nav style="display: flex; gap: var(--spacing-3); font-family: var(--font-sans); font-size: 0.9em;">
+          <a href="/archive/" style="color: var(--color-fg); text-decoration: none;">Archive</a>
+          <a href="/tags/" style="color: var(--color-fg); text-decoration: none;">Tags</a>
+          <a href="/about/" style="color: var(--color-fg); text-decoration: none;">About</a>
+        </nav>
+      </div>
+      <ThemeToggle />
+    </header>
+    <slot />
+  </body>
+</html>

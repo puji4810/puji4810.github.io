@@ -1,0 +1,103 @@
+---
+interface Post {
+  data: {
+    title: string;
+    publishedAt: Date;
+    targetUrl: string;
+  };
+}
+
+interface Props {
+  posts: Post[];
+  currentUrl: string;
+}
+
+const { posts, currentUrl } = Astro.props;
+
+// Group posts by year
+const postsByYear = posts.reduce((acc, post) => {
+  const year = post.data.publishedAt.getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, Post[]>);
+
+const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
+---
+<nav aria-label="Article navigation">
+  <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-expanded="false" aria-controls="sidebar-nav-content">
+    ☰ Articles
+  </button>
+  <div id="sidebar-nav-content" class="layout-sidebar-content">
+    <ul class="sidebar-list">
+      {years.map(year => (
+        <li class="sidebar-year-group">
+          <div class="sidebar-year">{year}</div>
+          <ul class="sidebar-posts">
+            {postsByYear[year].map(post => {
+              const isCurrent = post.data.targetUrl === currentUrl;
+              return (
+                <li>
+                  <a 
+                    href={post.data.targetUrl} 
+                    class={`sidebar-link ${isCurrent ? 'active' : ''}`}
+                    aria-current={isCurrent ? 'page' : undefined}
+                  >
+                    {post.data.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .sidebar-list, .sidebar-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sidebar-year-group {
+    margin-bottom: var(--spacing-4);
+  }
+  .sidebar-year {
+    font-family: var(--font-sans);
+    font-weight: bold;
+    font-size: 0.9em;
+    color: var(--color-fg);
+    opacity: 0.7;
+    margin-bottom: var(--spacing-2);
+    letter-spacing: 0.05em;
+  }
+  .sidebar-link {
+    display: block;
+    padding: var(--spacing-1) 0;
+    color: var(--color-fg);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 0.95em;
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+  .sidebar-link:hover {
+    color: var(--color-accent);
+  }
+  .sidebar-link.active {
+    color: var(--color-accent);
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('mobile-nav-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+    });
+  }
+</script>

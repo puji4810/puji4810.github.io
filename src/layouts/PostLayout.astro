@@ -1,0 +1,87 @@
+---
+import "../styles/theme.css";
+import "../styles/rendering.css";
+import "../styles/layout.css";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import ArticleSidebar from "../components/ArticleSidebar.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Post {
+  data: {
+    title: string;
+    publishedAt: Date;
+    targetUrl: string;
+  };
+}
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  description: string;
+  publishedAt: Date;
+  headings: Heading[];
+  posts: Post[];
+  currentUrl: string;
+}
+
+const { title, subtitle, description, publishedAt, headings, posts, currentUrl } = Astro.props;
+const formattedDate = new Intl.DateTimeFormat("en", {
+  dateStyle: "long",
+  timeZone: "UTC",
+}).format(publishedAt);
+
+const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-boot.js'), 'utf-8');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+    <title>{title}</title>
+    <script is:inline set:html={themeScript}></script>
+  </head>
+  <body>
+    <header style="padding: var(--spacing-3) var(--spacing-4); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border); margin-bottom: var(--spacing-4);">
+      <div style="font-family: var(--font-sans); font-weight: bold;">
+        <a href="/" style="color: var(--color-fg); text-decoration: none;">Home</a>
+      </div>
+      <ThemeToggle />
+    </header>
+
+    <div class="layout-container">
+      <aside class="layout-sidebar">
+        <ArticleSidebar posts={posts} currentUrl={currentUrl} />
+      </aside>
+
+      <main class="layout-content render-shell">
+        <header class="render-header">
+          <p style="font-family: var(--font-sans); opacity: 0.7; margin-bottom: var(--spacing-2);">{formattedDate}</p>
+          <h1 style="margin-top: 0;">{title}</h1>
+          {subtitle && <p style="font-size: 1.2em; opacity: 0.8;">{subtitle}</p>}
+        </header>
+        <article class="render-prose">
+          <slot />
+        </article>
+      </main>
+
+      <aside class="layout-toc">
+        <TableOfContents headings={headings} />
+      </aside>
+    </div>
+
+    <script>
+      import "../scripts/mermaid";
+    </script>
+  </body>
+</html>

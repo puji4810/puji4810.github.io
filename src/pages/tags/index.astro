@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+
+// Group posts by tag
+const tagsMap = posts.reduce((acc, post) => {
+  const tags = post.data.tags || [];
+  tags.forEach(tag => {
+    if (!acc[tag]) acc[tag] = [];
+    acc[tag].push(post);
+  });
+  return acc;
+}, {} as Record<string, typeof posts>);
+
+// Sort tags alphabetically
+const sortedTags = Object.keys(tagsMap).sort((a, b) => a.localeCompare(b));
+
+const pageTitle = "Tags";
+const description = "All tags from my articles.";
+---
+
+<BaseLayout title={pageTitle} description={description}>
+  <main style="max-width: 800px; margin: 0 auto; padding: var(--spacing-6) var(--spacing-4);">
+    <header style="margin-bottom: var(--spacing-6);">
+      <h1 style="font-family: var(--font-serif); font-size: 3rem; margin: 0;">Tags</h1>
+      <p style="font-family: var(--font-sans); font-size: 1.1rem; opacity: 0.8; margin-top: var(--spacing-2);">
+        {sortedTags.length} topics explored.
+      </p>
+    </header>
+
+    <div style="display: flex; flex-direction: column; gap: var(--spacing-8);">
+      {sortedTags.map(tag => {
+        const tagPosts = tagsMap[tag].sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+        return (
+          <section id={tag.toLowerCase().replace(/\s+/g, '-')}>
+            <h2 style="font-family: var(--font-sans); font-size: 2rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--spacing-2); margin-top: 0; margin-bottom: var(--spacing-4); color: var(--color-accent);">
+              #{tag}
+            </h2>
+            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--spacing-3);">
+              {tagPosts.map(post => (
+                <li style="display: flex; flex-direction: column; gap: var(--spacing-1);">
+                  <a href={post.data.targetUrl} style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-fg); text-decoration: none; font-weight: bold;">
+                    {post.data.title}
+                  </a>
+                  <div style="font-family: var(--font-sans); font-size: 0.9em; opacity: 0.7;">
+                    {new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(post.data.publishedAt)}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
+    </div>
+  </main>
+</BaseLayout>
