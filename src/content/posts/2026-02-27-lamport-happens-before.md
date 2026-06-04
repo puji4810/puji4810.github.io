@@ -69,7 +69,7 @@ graph LR
 
 基于这个定义，我们可以给**并发（Concurrency）**下一个非常精确的定义：如果两个事件 $a$ 和 $b$ 之间既没有 $a \to b$ 也不存在 $b \to a$（即 $a \nrightarrow b$ 且 $b \nrightarrow a$），那么我们就称 $a$ 和 $b$ 是并发的（记作 $a \parallel b$）。这意味着它们在因果图中没有路径相连，处于不同的分支上。值得注意的是，**并发并不意味着“同时发生”**，而是指它们在逻辑顺序上是互不干扰的。并发的本质，往往就隐藏在那些“缺失的边”中。
 
-以经典的 Message Passing (MP) 模型为例，如下方的 Mermaid 图 (D2) 所示。如果缺失了从 P1 的 `send` 到 P2 的 `recv` 这条虚线边，那么 P1 的数据准备（a, b）与 P2 的数据使用（d, e）之间就没有任何 Happens-Before 路径。这种边的缺失直接导致了并发访问冲突，即我们常说的数据竞争（Data Race）。
+以经典的 Message Passing (MP) 模型为例，如下方的 Mermaid 图 (D2) 所示。如果缺失了从 P1 的 `send` 到 P2 的 `recv` 这条虚线边，那么 P1 的数据准备（a, b）与 P2 的数据使用（d, e）之间就没有任何 Happens-Before 路径。在共享内存类比中，这种边的缺失会让跨线程的访问缺乏顺序保证；如果访问的是同一个非原子对象并且至少一方是写，就会形成数据竞争（Data Race）。
 
 ```mermaid
 graph TB
@@ -109,18 +109,18 @@ Lamport 给出了一套简单的规则来维护这个计数器：
 
 另一个限制是**外部因果性**：如果一个人打电话告诉另一台机器上的操作员"我刚看到事件 a 发生了"，这条因果链无法被系统捕获。这是形式模型和物理现实之间永恒的张力。
 
-这种“时间戳不代表因果”的现象，再次提醒我们 Happens-Before 是关于逻辑拓扑的，而非绝对时间的。虽然向量时钟（Vector Clocks）可以通过维护更多的元数据来解决逆命题问题（即实现 $C(a) < C(b) \iff a \to b$），但这通常会带来额外的内存开销 [^1]。
+这种“时间戳不代表因果”的现象，再次提醒我们 Happens-Before 是关于逻辑拓扑的，而非绝对时间的。虽然向量时钟（Vector Clocks）可以通过维护更多的元数据来解决逆命题问题：用向量偏序判断 $VC(a) < VC(b) \iff a \to b$，但这通常会带来额外的内存开销 [^1]。
 
 
 ## 从硬件到语言：消息传递 (Hardware to Language: Message Passing)
 
-在 Lamport 的原始论文中，消息传递是建立跨进程因果关系的唯一手段。但这和现代多核处理器是**同构的**：每个核心相当于一个进程，每次同步操作相当于消息传递。
+在 Lamport 的原始论文中，消息传递是建立跨进程因果关系的唯一手段。这个视角也可以类比到现代多核处理器：每个核心都有自己的执行观察点，而 release/acquire、锁、屏障等同步操作负责把跨核心的因果边显式接起来。
 
-### 硬件的重排序与 TSO
+### 硬件的重排序与弱内存模型
 
-现代 CPU 为了性能，会对内存操作进行重排序（如 Store Buffer 的延迟刷新或乱序执行）。x86 的内存模型叫做 **TSO（Total Store Order）**，可以理解为：所有处理器共享同一块内存，但每个处理器有一个私有的写队列（FIFO）。
+现代 CPU 为了性能，会对内存操作进行重排序（如 Store Buffer 的延迟刷新或乱序执行）。不同硬件模型允许的重排序并不相同：x86 的 **TSO（Total Store Order）** 保留了较强的 store-store 顺序，而 ARM/POWER 这类弱内存模型则需要更明确的屏障或 acquire/release 语义。
 
-在这种模型下，即使两个线程在同一个物理内存上操作，缺失了显式同步也可能打破直觉。例如，线程 2 可能会先观察到 `flag` 的更新，却读到 `data` 的旧值。这在事件图的角度来看，就是因为 `W(data)` 到 `R(data)` 之间缺失了一条关键的因果边。
+在弱内存模型下，即使两个线程在同一个物理内存上操作，缺失了显式同步也可能打破直觉。例如，线程 2 可能会先观察到 `flag` 的更新，却读到 `data` 的旧值。这在事件图的角度来看，不是因为线程 1 内部缺少 `W(data) -> W(flag)` 的程序序，而是因为 `W(flag)` 和 `R(flag)` 之间没有建立跨线程的同步边；因此这条程序序无法传递到线程 2 的 `R(data)`。
 
 ```mermaid
 graph TD
@@ -132,16 +132,14 @@ graph TD
         direction TB
         r1(("R: flag==1")) --> r2(("R: data==?"))
     end
-    w2 -.->|"synchronizes-with<br/>(acquire/release)"| r1
-    w1 -->|"程序序"| w2
-    r1 -->|"程序序"| r2
+    w2 -.->|"缺失的 synchronizes-with"| r1
     w1 ~~~ r2
-    linkStyle 5 stroke:red,stroke-width:2px,stroke-dasharray:5
+    linkStyle 2 stroke:red,stroke-width:2px,stroke-dasharray:5
 ```
 
 ### C++ 内存模型：补齐缺失的边
 
-现代编程语言（如 C++）的内存模型，本质上是在硬件之上提供的一层抽象。在 C++ 中，这种跨线程的边通常是由 **synchronizes-with**（同步关系）来构建的。当我们使用 `std::atomic` 的 Acquire/Release 语义时，一个线程的 Release Store 同步于另一个线程对同一变量的 Acquire Load。
+现代编程语言（如 C++）的内存模型，本质上是在硬件之上提供的一层抽象。在 C++ 中，这种跨线程的边通常是由 **synchronizes-with**（同步关系）来构建的。当我们使用 `std::atomic` 的 Acquire/Release 语义时，一个线程的 Release Store 可以同步于另一个线程对同一变量、且读到该值的 Acquire Load。
 
 ```cpp
 #include <atomic>
@@ -167,11 +165,11 @@ void consumer() {
     while (flag.load(std::memory_order_acquire) != 1) {}  // ← acquire
     
     // 4. 结合传递性，此时 data.store 一定 happens-before 这里的 read
-    assert(data.load(std::memory_order_relaxed) == 42); // 绝对安全
+    assert(data.load(std::memory_order_relaxed) == 42); // 在这个程序中安全
 }
 ```
 
-在 C++ 中，如果不通过这种方式显式建立 Happens-Before 关系而产生并发读写，就会构成 **Data Race**，这在标准中被定义为未定义行为（Undefined Behavior）。
+在 C++ 中，如果对同一个非原子对象的并发读写没有通过这种方式显式建立 Happens-Before 关系，就会构成 **Data Race**，这在标准中被定义为未定义行为（Undefined Behavior）。如果对象本身是 `std::atomic`，即使用 `memory_order_relaxed` 也不会形成 C++ 意义上的 data race，但 relaxed 原子操作不提供上面这类跨对象的可见性保证。
 
 ## JMM 中的 happens-before
 
@@ -217,7 +215,7 @@ task<void> parent() {
 这种“将 happens-before 编码进词法结构”的设计在现代语言中已成趋势：
 
 - **Java 21 StructuredTaskScope**：`scope.join()` 建立了确定的 happens-before 边。
-- **Python asyncio.TaskGroup**：退出 `with` 块时，所有任务已完成，结果安全可见。
+- **Python asyncio.TaskGroup**：退出 `with` 块时，所有任务已完成，生命周期上可以安全使用结果。
 - **Swift async let**：`await` 建立 happens-before，并发任务的结果在后续可见。
 
 
@@ -231,16 +229,16 @@ task<void> parent() {
 | 事件（event） | 内存读写、原子操作 | `co_await` 点、任务创建 |
 | 消息发送/接收（C2） | `release` 写 / `acquire` 读 | `fork` / `join`（作用域退出） |
 | 进程内顺序（C1） | 程序顺序（program order） | 协程内顺序 |
-| happens-before `→` | JMM happens-before / C++ sequenced-before | 作用域包含关系 |
-| 并发事件 `∥` | 数据竞争（data race） | 并行任务（无冲突时安全） |
-| 全序扩展 | 同步顺序（synchronization order） | 任务完成顺序 |
+| happens-before `→` | JMM/C++ happens-before | 任务完成到父任务继续执行的顺序 |
+| 并发事件 `∥` | 无 HB 的并发访问；冲突时形成 data race | 并行任务（无冲突时安全） |
+| 全序扩展 | `seq_cst` 全序 / 单个原子对象的修改序 | 任务完成顺序 |
 
 ## "Don'ts" 误区清单
 
 - Happens-Before $\neq$ 物理时间的先后顺序。
 - Lamport 时间戳相等并不代表事件同步。
 - C++ 中的 `volatile` 不提供同步（Synchronization）语义。
-- 数据竞争（Data Race）在 C++ 中是未定义行为（UB），本质上是因为缺失了必要的 HB 边。
+- C++ 中非原子对象上的数据竞争是未定义行为（UB），本质上是因为冲突访问之间缺失了必要的 HB 边。
 
 ## 附录: Store Buffering litmus
 
@@ -265,13 +263,13 @@ void thread2() {
 }
 
 // 问题：r1 == 0 && r2 == 0 是否同时发生？
-// x86-TSO：不可能（TSO 保证 Store 有序）
-// ARM/POWER：可能！这正是 Store Buffering 的体现
+// x86-TSO：可能。每个核心可能在 store 仍停留于自己的 Store Buffer 时继续执行后续 load
+// ARM/POWER：也可能，而且弱内存模型还允许更多重排序
 ```
 
 ## 结语：一个概念的生命力
 
-Lamport 在 1978 年提出 happens-before，是为了解决分布式系统中"事件先后"的形式化问题。并发的本质是共享状态的可见性问题，而 happens-before 是描述可见性的最小充分条件。
+Lamport 在 1978 年提出 happens-before，是为了解决分布式系统中"事件先后"的形式化问题。并发问题的核心通常不是物理时间上的谁先谁后，而是共享状态、消息和任务生命周期之间是否存在足够的因果边。Happens-before 正是描述这些因果边的基础工具。
 
 理解了 happens-before，你就理解了为什么 `volatile` 写在 Java 中有特殊含义，为什么 C++ 的 `memory_order_acquire` 叫"acquire"，为什么结构化并发的 scope 退出需要等待所有子任务完成。这些不是孤立的语言特性，它们是同一个数学概念在不同层次的投影。
 
