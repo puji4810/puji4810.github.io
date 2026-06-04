@@ -14,27 +14,24 @@ const description = "Puji's Blog: Programming, systems, and design.";
 
 <BaseLayout title={pageTitle} description={description}>
   <main class="home-main">
-    <!-- Hero Section -->
     <section class="hero animate-fade-up">
       <div class="hero-inner">
-        <p class="hero-eyebrow animate-fade-up delay-1">Volume I — A Manual for Thought</p>
-        <h1 class="hero-title animate-fade-up delay-2">
-          Notes that <em>think</em><br />back at you.
+        <h1 class="hero-title animate-fade-up delay-1">
+          Notes that <em class="gradient-text">think</em><br />back at you.
         </h1>
-        <p class="hero-description animate-fade-up delay-3">
+        <p class="hero-description animate-fade-up delay-2">
           A quiet writing room for the long-form thinker — a second brain bound in restraint.
           Programming, distributed systems, and things that interest me.
         </p>
-        <div class="hero-actions animate-fade-up delay-4">
+        <div class="hero-actions animate-fade-up delay-3">
           <a href="/archive/" class="btn btn-primary">Begin reading</a>
           <a href="/about/" class="btn btn-ghost">About this site</a>
         </div>
       </div>
     </section>
 
-    <!-- Featured Post -->
     {featuredPost && (
-      <section class="featured animate-fade-up delay-2">
+      <section class="featured glass animate-fade-up delay-2">
         <div class="featured-inner">
           <span class="featured-label">Featured</span>
           <a href={featuredPost.data.targetUrl} class="featured-link">
@@ -51,10 +48,9 @@ const description = "Puji's Blog: Programming, systems, and design.";
       </section>
     )}
 
-    <!-- Post Grid -->
     <section class="post-grid">
       {otherPosts.map(post => (
-         <article class="post-card card-hover animate-fade-up">
+         <article class="post-card glass animate-fade-up">
            <time class="post-card-date">
             {new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" }).format(post.data.publishedAt)}
           </time>
@@ -71,47 +67,36 @@ const description = "Puji's Blog: Programming, systems, and design.";
 
 <style>
   .home-main {
-    max-width: 1000px;
+    max-width: 800px;
     margin: 0 auto;
     padding: var(--spacing-8) var(--spacing-5);
   }
 
-  /* ---------- Hero ---------- */
   .hero {
     margin-bottom: var(--spacing-12);
   }
 
   .hero-inner {
-    max-width: 720px;
-  }
-
-  .hero-eyebrow {
-    font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-fg-muted);
-    margin-bottom: var(--spacing-5);
+    max-width: 640px;
   }
 
   .hero-title {
-    font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    font-weight: 600;
+    font-family: var(--font-sans);
+    font-size: var(--text-4xl);
+    font-weight: 700;
     line-height: var(--leading-tight);
     color: var(--color-fg);
     margin: 0 0 var(--spacing-6) 0;
+    letter-spacing: -0.02em;
   }
 
   .hero-title em {
     font-style: italic;
-    color: var(--color-accent);
   }
 
   @media (min-width: 768px) {
     .hero-title {
-      font-size: var(--text-6xl);
+      font-size: var(--text-5xl);
     }
   }
 
@@ -127,53 +112,80 @@ const description = "Puji's Blog: Programming, systems, and design.";
   .hero-actions {
     display: flex;
     align-items: center;
-    gap: var(--spacing-5);
+    gap: var(--spacing-4);
     flex-wrap: wrap;
   }
 
   .btn {
     display: inline-flex;
     align-items: center;
-    padding: var(--spacing-3) var(--spacing-5);
+    padding: var(--spacing-2) var(--spacing-4);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     font-weight: 500;
     text-decoration: none;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-md);
     transition: all var(--transition-fast);
     cursor: pointer;
     border: none;
+    position: relative;
+    overflow: hidden;
   }
 
   .btn-primary {
-    background: var(--color-fg);
+    background: linear-gradient(135deg, var(--color-fg) 0%, #333333 100%);
     color: var(--color-bg);
+    box-shadow: var(--shadow-sm);
   }
 
   .btn-primary:hover {
-    background: var(--color-accent);
-    color: var(--color-bg);
+    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+    color: #ffffff;
     text-decoration: none;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
   }
 
   .btn-ghost {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--color-fg-muted);
     border: 1px solid var(--color-border);
   }
 
   .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.75);
     color: var(--color-fg);
     border-color: var(--color-fg-muted);
     text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
   }
 
-  /* ---------- Featured ---------- */
+  html[data-theme="dark"] .btn-primary {
+    background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+    color: #060b14;
+  }
+
+  html[data-theme="dark"] .btn-primary:hover {
+    background: linear-gradient(135deg, #22d3ee 0%, #0ea5e9 100%);
+    color: #060b14;
+  }
+
+  html[data-theme="dark"] .btn-ghost {
+    background: rgba(15, 25, 50, 0.3);
+    color: var(--color-fg-muted);
+  }
+
+  html[data-theme="dark"] .btn-ghost:hover {
+    background: rgba(15, 25, 50, 0.55);
+    color: var(--color-fg);
+  }
+
   .featured {
     margin-bottom: var(--spacing-12);
     padding: var(--spacing-8);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     transition: box-shadow var(--transition-base), border-color var(--transition-base);
   }
@@ -183,15 +195,18 @@ const description = "Puji's Blog: Programming, systems, and design.";
     border-color: var(--color-border-light);
   }
 
+  html[data-theme="dark"] .featured:hover {
+    background: rgba(20, 35, 65, 0.48);
+    border-color: rgba(120, 150, 190, 0.18);
+  }
+
   .featured-label {
     display: inline-block;
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     color: var(--color-accent);
-    margin-bottom: var(--spacing-4);
+    margin-bottom: var(--spacing-3);
   }
 
   .featured-link {
@@ -204,12 +219,12 @@ const description = "Puji's Blog: Programming, systems, and design.";
   }
 
   .featured-title {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
+    font-family: var(--font-sans);
+    font-size: var(--text-2xl);
     font-weight: 600;
     line-height: var(--leading-snug);
     color: var(--color-fg);
-    margin: 0 0 var(--spacing-3) 0;
+    margin: 0 0 var(--spacing-2) 0;
     transition: color var(--transition-fast);
   }
 
@@ -219,18 +234,18 @@ const description = "Puji's Blog: Programming, systems, and design.";
 
   .featured-subtitle {
     font-family: var(--font-serif);
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     font-style: italic;
     color: var(--color-fg-muted);
-    margin: 0 0 var(--spacing-4) 0;
+    margin: 0 0 var(--spacing-3) 0;
   }
 
   .featured-summary {
     font-family: var(--font-serif);
     font-size: var(--text-base);
     color: var(--color-fg-muted);
-    line-height: var(--leading-relaxed);
-    margin: 0 0 var(--spacing-5) 0;
+    line-height: var(--leading-normal);
+    margin: 0 0 var(--spacing-4) 0;
   }
 
   .featured-date {
@@ -239,17 +254,16 @@ const description = "Puji's Blog: Programming, systems, and design.";
     color: var(--color-fg-subtle);
   }
 
-  /* ---------- Post Grid ---------- */
   .post-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--spacing-8);
+    gap: var(--spacing-6);
   }
 
   @media (min-width: 640px) {
     .post-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--spacing-8) var(--spacing-6);
+      gap: var(--spacing-6);
     }
   }
 
@@ -257,16 +271,23 @@ const description = "Puji's Blog: Programming, systems, and design.";
     display: flex;
     flex-direction: column;
     gap: var(--spacing-2);
-    padding-top: var(--spacing-5);
-    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-5);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  }
+
+  .post-card:hover {
+    box-shadow: var(--shadow-sm);
+  }
+
+  html[data-theme="dark"] .post-card:hover {
+    background: rgba(20, 35, 65, 0.48);
+    border-color: rgba(120, 150, 190, 0.18);
   }
 
   .post-card-date {
     font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: var(--text-sm);
     color: var(--color-fg-subtle);
   }
 
@@ -280,8 +301,8 @@ const description = "Puji's Blog: Programming, systems, and design.";
   }
 
   .post-card-title {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-family: var(--font-sans);
+    font-size: var(--text-lg);
     font-weight: 600;
     line-height: var(--leading-snug);
     color: var(--color-fg);

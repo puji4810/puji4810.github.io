@@ -1,30 +1,24 @@
 @import "katex/dist/katex.min.css";
 
-/* ============================================
-   RENDERING — Article typography & prose
-   ============================================ */
-
 .render-prose {
   font-family: var(--font-serif);
   color: var(--color-fg);
   line-height: var(--leading-relaxed);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
 }
 
-/* Do NOT constrain max-width here — let layout.css handle container width */
 .render-prose > * {
   margin-left: 0;
   margin-right: 0;
 }
 
-/* ---------- Headings ---------- */
 .render-prose h1,
 .render-prose h2,
 .render-prose h3,
 .render-prose h4,
 .render-prose h5,
 .render-prose h6 {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   color: var(--color-fg);
   line-height: var(--leading-snug);
   margin-top: 2em;
@@ -33,43 +27,29 @@
 }
 
 .render-prose h1 {
-  font-size: var(--text-3xl);
+  font-size: var(--text-2xl);
 }
 
 .render-prose h2 {
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   padding-bottom: var(--spacing-3);
   border-bottom: 1px solid var(--color-border);
 }
 
 .render-prose h3 {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
 }
 
 .render-prose h4 {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-family: var(--font-sans);
   font-weight: 600;
 }
 
-/* ---------- Paragraphs ---------- */
 .render-prose p {
   margin: 0 0 var(--spacing-5) 0;
 }
 
-/* ---------- Drop Cap ---------- */
-.render-prose > p:first-of-type::first-letter {
-  font-family: var(--font-display);
-  font-size: 3.2em;
-  float: left;
-  line-height: 0.8;
-  padding-right: var(--spacing-2);
-  padding-top: 0.1em;
-  font-weight: 600;
-  color: var(--color-accent);
-}
-
-/* ---------- Links ---------- */
 .render-prose a {
   color: var(--color-accent);
   text-decoration: underline;
@@ -82,7 +62,6 @@
   color: var(--color-accent-hover);
 }
 
-/* ---------- Lists ---------- */
 .render-prose ul,
 .render-prose ol {
   margin: 0 0 var(--spacing-5) 0;
@@ -97,22 +76,17 @@
   color: var(--color-fg-muted);
 }
 
-/* ---------- Blockquotes ---------- */
 .render-prose blockquote {
   margin: var(--spacing-6) 0;
   padding: var(--spacing-4) var(--spacing-6);
   border-left: 3px solid var(--color-accent);
   background: var(--color-surface);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  font-style: italic;
   color: var(--color-fg-muted);
 }
 
 .render-prose blockquote p:last-child {
   margin-bottom: 0;
 }
-
-/* ---------- Code ---------- */
 
 html[data-theme="dark"] .expressive-code,
 html[data-theme="dark"] .expressive-code .frame {
@@ -130,13 +104,13 @@ html[data-theme="dark"] .expressive-code .ec-line span[style^="--"] {
 
 html[data-theme="light"] .expressive-code,
 html[data-theme="light"] .expressive-code .frame {
-  --ec-codeBg: #fdf6e3;
-  --ec-frm-edBg: #fdf6e3;
-  --code-background: #fdf6e3;
-  --ec-codeFg: #58656d;
+  --ec-codeBg: #f6f8fa;
+  --ec-frm-edBg: #f6f8fa;
+  --code-background: #f6f8fa;
+  --ec-codeFg: #24292e;
 }
 html[data-theme="light"] .expressive-code pre {
-  background: #fdf6e3 !important;
+  background: #f6f8fa !important;
 }
 html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   color: var(--0, inherit) !important;
@@ -148,51 +122,32 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   padding: 0.15em 0.4em;
   border-radius: var(--radius-sm);
   font-size: 0.85em;
-  color: var(--color-accent);
+  color: var(--color-fg);
 }
 
 .render-prose pre {
   position: relative;
   background: var(--color-bg-elevated);
-  padding: var(--spacing-6) var(--spacing-5) var(--spacing-5);
+  padding: var(--spacing-5);
   border-radius: var(--radius-md);
   overflow-x: auto;
   overflow-y: auto;
   margin: var(--spacing-6) 0;
   border: 1px solid var(--color-border);
-  border-top: 3px solid var(--color-accent);
   font-size: var(--text-sm);
   line-height: 1.7;
   max-height: 600px;
   -webkit-overflow-scrolling: touch;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base);
-}
-
-.render-prose pre:hover {
-  box-shadow: var(--shadow-md);
 }
 
 .render-prose pre::before {
-  content: "";
-  position: absolute;
-  top: var(--spacing-2);
-  left: var(--spacing-5);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-border);
-  box-shadow:
-    16px 0 0 var(--color-border),
-    32px 0 0 var(--color-accent);
+  display: none;
 }
 
-/* Expressive Code: let EC handle its own styling */
 .expressive-code pre {
   background: transparent;
   padding: var(--spacing-5);
   border: none;
-  border-top: none;
   border-radius: 0;
   box-shadow: none;
   margin: 0;
@@ -201,11 +156,7 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
 .expressive-code pre::before {
   display: none;
 }
-.expressive-code pre:hover {
-  box-shadow: none;
-}
 
-/* ---------- Tables ---------- */
 .render-prose table {
   width: 100%;
   border-collapse: collapse;
@@ -214,7 +165,6 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
 }
 
 .render-prose thead th {
@@ -222,9 +172,7 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: var(--text-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  border-bottom: 2px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .render-prose th,
@@ -239,8 +187,6 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: var(--text-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
 
 .render-prose tr:nth-child(even) {
@@ -251,7 +197,6 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   background: var(--color-surface-hover);
 }
 
-/* ---------- Images ---------- */
 .render-prose img {
   max-width: 100%;
   height: auto;
@@ -260,14 +205,12 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   display: block;
 }
 
-/* ---------- Horizontal Rule ---------- */
 .render-prose hr {
   border: none;
   border-top: 1px solid var(--color-border);
   margin: var(--spacing-8) 0;
 }
 
-/* ---------- Strong / Em ---------- */
 .render-prose strong {
   font-weight: 700;
   color: var(--color-fg);
@@ -277,7 +220,6 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   font-style: italic;
 }
 
-/* ---------- KaTeX ---------- */
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
@@ -285,7 +227,6 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   margin: var(--spacing-5) 0;
 }
 
-/* ---------- Mermaid ---------- */
 .mermaid {
   display: flex;
   justify-content: center;
