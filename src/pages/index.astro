@@ -133,53 +133,48 @@ const description = "Puji's Blog: Programming, systems, and design.";
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, var(--color-fg) 0%, #333333 100%);
+    background: var(--color-accent);
     color: var(--color-bg);
-    box-shadow: var(--shadow-sm);
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-    color: #ffffff;
+    background: var(--color-accent-hover);
+    color: var(--color-bg);
     text-decoration: none;
-    box-shadow: var(--shadow-md);
     transform: translateY(-1px);
   }
 
   .btn-ghost {
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--color-surface);
     color: var(--color-fg-muted);
-    border: 1px solid var(--color-border);
+    border: 0.5px solid var(--color-border);
   }
 
   .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.75);
+    background: var(--color-surface-hover);
     color: var(--color-fg);
-    border-color: var(--color-fg-muted);
+    border-color: var(--color-accent);
     text-decoration: none;
-    box-shadow: var(--shadow-sm);
     transform: translateY(-1px);
   }
 
   html[data-theme="dark"] .btn-primary {
-    background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
-    color: #060b14;
+    background: var(--color-accent);
+    color: var(--color-bg);
   }
 
   html[data-theme="dark"] .btn-primary:hover {
-    background: linear-gradient(135deg, #22d3ee 0%, #0ea5e9 100%);
-    color: #060b14;
+    background: var(--color-accent-hover);
+    color: var(--color-bg);
   }
 
   html[data-theme="dark"] .btn-ghost {
-    background: rgba(15, 25, 50, 0.3);
+    background: var(--color-surface);
     color: var(--color-fg-muted);
   }
 
   html[data-theme="dark"] .btn-ghost:hover {
-    background: rgba(15, 25, 50, 0.55);
+    background: var(--color-surface-hover);
     color: var(--color-fg);
   }
 
@@ -187,17 +182,17 @@ const description = "Puji's Blog: Programming, systems, and design.";
     margin-bottom: var(--spacing-12);
     padding: var(--spacing-8);
     border-radius: var(--radius-md);
-    transition: box-shadow var(--transition-base), border-color var(--transition-base);
+    transition: background-color var(--transition-base), border-color var(--transition-base);
   }
 
   .featured:hover {
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-border-light);
+    background: var(--color-surface-hover);
+    border-color: var(--color-accent);
   }
 
   html[data-theme="dark"] .featured:hover {
-    background: rgba(20, 35, 65, 0.48);
-    border-color: rgba(120, 150, 190, 0.18);
+    background: var(--color-surface-hover);
+    border-color: var(--color-accent);
   }
 
   .featured-label {
@@ -273,16 +268,17 @@ const description = "Puji's Blog: Programming, systems, and design.";
     gap: var(--spacing-2);
     padding: var(--spacing-5);
     border-radius: var(--radius-md);
-    transition: background-color var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+    transition: background-color var(--transition-base), border-color var(--transition-base);
   }
 
   .post-card:hover {
-    box-shadow: var(--shadow-sm);
+    background: var(--color-surface-hover);
+    border-color: var(--color-accent);
   }
 
   html[data-theme="dark"] .post-card:hover {
-    background: rgba(20, 35, 65, 0.48);
-    border-color: rgba(120, 150, 190, 0.18);
+    background: var(--color-surface-hover);
+    border-color: var(--color-accent);
   }
 
   .post-card-date {

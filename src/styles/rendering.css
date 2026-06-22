@@ -90,13 +90,13 @@
 
 html[data-theme="dark"] .expressive-code,
 html[data-theme="dark"] .expressive-code .frame {
-  --ec-codeBg: #2d353b;
-  --ec-frm-edBg: #2d353b;
-  --code-background: #2d353b;
+  --ec-codeBg: #232019;
+  --ec-frm-edBg: #232019;
+  --code-background: #232019;
   --ec-codeFg: #d3c6aa;
 }
 html[data-theme="dark"] .expressive-code pre {
-  background: #2d353b !important;
+  background: #232019 !important;
 }
 html[data-theme="dark"] .expressive-code .ec-line span[style^="--"] {
   color: var(--1, inherit) !important;
@@ -104,13 +104,13 @@ html[data-theme="dark"] .expressive-code .ec-line span[style^="--"] {
 
 html[data-theme="light"] .expressive-code,
 html[data-theme="light"] .expressive-code .frame {
-  --ec-codeBg: #f6f8fa;
-  --ec-frm-edBg: #f6f8fa;
-  --code-background: #f6f8fa;
-  --ec-codeFg: #24292e;
+  --ec-codeBg: #F2ECE3;
+  --ec-frm-edBg: #F2ECE3;
+  --code-background: #F2ECE3;
+  --ec-codeFg: #2C2118;
 }
 html[data-theme="light"] .expressive-code pre {
-  background: #f6f8fa !important;
+  background: #F2ECE3 !important;
 }
 html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   color: var(--0, inherit) !important;
