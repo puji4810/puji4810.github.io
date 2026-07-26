@@ -2,6 +2,10 @@
 // Thin indicator pinned to the bottom edge of the sticky post header. It
 // tracks progress through the article body, not the whole document, so the
 // header and footer navigation do not count as "reading".
+//
+// The ratio is published as `--reading-progress` on the root element so other
+// components (the mobile contents button's ring) can render it without adding
+// a second scroll listener.
 ---
 
 <div class="reading-progress" aria-hidden="true">
@@ -22,7 +26,7 @@
   .reading-progress-fill {
     height: 100%;
     background: var(--color-accent);
-    transform: scaleX(0);
+    transform: scaleX(var(--reading-progress, 0));
     transform-origin: left center;
     will-change: transform;
   }
@@ -30,9 +34,8 @@
 
 <script>
   function initReadingProgress() {
-    const fill = document.querySelector<HTMLElement>(".reading-progress-fill");
     const article = document.querySelector<HTMLElement>(".render-prose");
-    if (!fill || !article) return;
+    if (!article) return;
 
     const header = document.querySelector<HTMLElement>(".post-page-header");
 
@@ -43,7 +46,10 @@
       const span = box.height - (window.innerHeight - headerHeight);
       const scrolled = headerHeight - box.top;
       const ratio = span > 0 ? scrolled / span : box.top <= headerHeight ? 1 : 0;
-      fill!.style.transform = `scaleX(${Math.min(Math.max(ratio, 0), 1)})`;
+      document.documentElement.style.setProperty(
+        "--reading-progress",
+        String(Math.min(Math.max(ratio, 0), 1))
+      );
     }
 
     let ticking = false;

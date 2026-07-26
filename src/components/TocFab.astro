@@ -1,0 +1,411 @@
+---
+/**
+ * Contents button for narrow screens, where the sticky rail has no room.
+ *
+ * A collapsed block at the top of the article only helps before you start
+ * reading — once you are three screens down, getting back to it costs more
+ * than scrolling. This stays reachable at any scroll depth, and wears the
+ * reading progress as a ring so the button doubles as a position indicator.
+ */
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 3);
+
+const minDepth = filteredHeadings.length
+  ? Math.min(...filteredHeadings.map(h => h.depth))
+  : 1;
+
+// r=15 in a 34-unit box; the ring is stroked, so keep it clear of the edge.
+const RADIUS = 15;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+---
+
+{filteredHeadings.length > 0 && (
+  <div class="toc-fab-root">
+    <button
+      type="button"
+      class="toc-fab"
+      aria-expanded="false"
+      aria-controls="toc-sheet"
+      aria-label="Table of contents"
+    >
+      <svg class="toc-fab-ring" viewBox="0 0 34 34" aria-hidden="true">
+        <circle class="toc-fab-ring-track" cx="17" cy="17" r={RADIUS} />
+        <circle
+          class="toc-fab-ring-value"
+          cx="17"
+          cy="17"
+          r={RADIUS}
+          style={`--circumference: ${CIRCUMFERENCE}`}
+        />
+      </svg>
+      <svg class="toc-fab-glyph" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2 4h12M2 8h9M2 12h6" />
+      </svg>
+    </button>
+
+    <div class="toc-sheet-scrim" hidden></div>
+
+    <div
+      class="toc-sheet"
+      id="toc-sheet"
+      role="dialog"
+      aria-label="Table of contents"
+      hidden
+    >
+      <header class="toc-sheet-header">
+        <span class="toc-sheet-title" lang="en">On this page</span>
+        <button type="button" class="toc-sheet-close" aria-label="Close">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" />
+          </svg>
+        </button>
+      </header>
+      <nav class="toc-sheet-body">
+        <ul class="toc-list">
+          {filteredHeadings.map(heading => (
+            <li class={`toc-item level-${heading.depth - minDepth}`}>
+              <a href={`#${heading.slug}`} class="toc-link">
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+)}
+
+<style>
+  /* The rail takes over at this width; the button would be redundant. */
+  @media (min-width: 1200px) {
+    .toc-fab-root {
+      display: none;
+    }
+  }
+
+  .toc-fab {
+    position: fixed;
+    right: var(--spacing-5);
+    bottom: calc(var(--spacing-5) + env(safe-area-inset-bottom, 0px));
+    z-index: calc(var(--z-nav) + 1);
+    width: 3.25rem;
+    height: 3.25rem;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-fg-muted);
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast),
+      background-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .toc-fab:hover,
+  .toc-fab:focus-visible {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .toc-fab:active {
+    transform: scale(0.96);
+  }
+
+  /* Ring and glyph share the button's centre. */
+  .toc-fab-ring,
+  .toc-fab-glyph {
+    grid-area: 1 / 1;
+  }
+
+  .toc-fab-ring {
+    width: 100%;
+    height: 100%;
+    /* 12 o'clock start, clockwise. */
+    transform: rotate(-90deg);
+    fill: none;
+    stroke-width: 1.5;
+  }
+
+  .toc-fab-ring-track {
+    stroke: transparent;
+  }
+
+  .toc-fab-ring-value {
+    stroke: var(--color-accent);
+    stroke-linecap: round;
+    stroke-dasharray: var(--circumference);
+    stroke-dashoffset: calc(
+      var(--circumference) * (1 - var(--reading-progress, 0))
+    );
+  }
+
+  .toc-fab-glyph {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  /* A class-level `display` outranks the UA rule for [hidden], which would
+     leave the closed sheet laid out and swallowing taps. */
+  .toc-sheet[hidden],
+  .toc-sheet-scrim[hidden] {
+    display: none;
+  }
+
+  .toc-sheet-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-nav) + 1);
+    background: rgba(26, 24, 20, 0.4);
+    animation: fadeIn var(--transition-base) ease-out both;
+  }
+
+  .toc-sheet {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: calc(var(--z-nav) + 2);
+    display: flex;
+    flex-direction: column;
+    max-height: min(70vh, 32rem);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid var(--color-border);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    background: var(--color-bg);
+    animation: sheetUp var(--transition-base) ease-out both;
+  }
+
+  @keyframes sheetUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* Wider than a phone: settle it into a panel above the button. */
+  @media (min-width: 640px) {
+    .toc-sheet {
+      right: var(--spacing-5);
+      bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+      left: auto;
+      width: 20rem;
+      max-height: min(60vh, 28rem);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+    }
+
+    .toc-sheet-scrim {
+      background: transparent;
+    }
+  }
+
+  .toc-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4) var(--spacing-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .toc-sheet-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-fg-muted);
+  }
+
+  .toc-sheet-close {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-fg-muted);
+    cursor: pointer;
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .toc-sheet-close:hover,
+  .toc-sheet-close:focus-visible {
+    color: var(--color-accent);
+    background: var(--color-surface-hover);
+  }
+
+  .toc-sheet-close svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .toc-sheet-body {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--spacing-4) var(--spacing-5);
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 1.5px solid var(--color-border);
+  }
+
+  .toc-item {
+    margin-bottom: var(--spacing-1);
+  }
+
+  .toc-item.level-1 {
+    padding-left: var(--spacing-3);
+  }
+
+  .toc-item.level-2 {
+    padding-left: var(--spacing-5);
+  }
+
+  .toc-item.level-0 > .toc-link {
+    color: var(--color-fg);
+    font-weight: 500;
+  }
+
+  .toc-link {
+    display: block;
+    padding: var(--spacing-2) var(--spacing-3);
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+    border-left: 1.5px solid transparent;
+    margin-left: -1.5px;
+  }
+
+  .toc-link:hover,
+  .toc-link:focus {
+    color: var(--color-accent);
+    border-left-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  /* Outranks `.toc-item.level-0 > .toc-link`, which is also three classes. */
+  .toc-item > .toc-link.is-active {
+    color: var(--color-accent);
+    border-left-color: var(--color-accent);
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  function initTocFab() {
+    const root = document.querySelector<HTMLElement>(".toc-fab-root");
+    if (!root) return;
+
+    const button = root.querySelector<HTMLButtonElement>(".toc-fab")!;
+    const sheet = root.querySelector<HTMLElement>(".toc-sheet")!;
+    const scrim = root.querySelector<HTMLElement>(".toc-sheet-scrim")!;
+    const closeButton = root.querySelector<HTMLButtonElement>(".toc-sheet-close")!;
+    const body = sheet.querySelector<HTMLElement>(".toc-sheet-body")!;
+
+    let isOpen = false;
+
+    function open() {
+      if (isOpen) return;
+      isOpen = true;
+      sheet.hidden = false;
+      scrim.hidden = false;
+      button.setAttribute("aria-expanded", "true");
+      // Anchor jumps still need the page to scroll, so the background stays
+      // scrollable; the scrim is what keeps a stray tap from reaching it.
+      revealActive();
+      closeButton.focus();
+    }
+
+    function close(returnFocus = true) {
+      if (!isOpen) return;
+      isOpen = false;
+      sheet.hidden = true;
+      scrim.hidden = true;
+      button.setAttribute("aria-expanded", "false");
+      if (returnFocus) button.focus();
+    }
+
+    // Bring the section being read into view when the sheet opens.
+    function revealActive() {
+      const active = body.querySelector<HTMLElement>(".toc-link.is-active");
+      if (!active) return;
+      const bodyBox = body.getBoundingClientRect();
+      const activeBox = active.getBoundingClientRect();
+      body.scrollTop +=
+        activeBox.top - bodyBox.top - body.clientHeight / 2 + activeBox.height / 2;
+    }
+
+    button.addEventListener("click", () => (isOpen ? close() : open()));
+    closeButton.addEventListener("click", () => close());
+    scrim.addEventListener("click", () => close());
+
+    // A heading link has done its job the moment it is followed.
+    body.addEventListener("click", event => {
+      if ((event.target as HTMLElement).closest("a")) close(false);
+    });
+
+    document.addEventListener("keydown", event => {
+      if (!isOpen) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      // Keep tabbing inside the sheet while it is open.
+      const focusable = [
+        closeButton,
+        ...Array.from(body.querySelectorAll<HTMLElement>("a[href]")),
+      ];
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const current = document.activeElement;
+
+      if (event.shiftKey && current === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && current === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    // The rail takes over on wide screens; leaving the sheet open would strand
+    // a dialog with no button to close it back into.
+    const wide = window.matchMedia("(min-width: 1200px)");
+    wide.addEventListener("change", event => {
+      if (event.matches) close(false);
+    });
+  }
+
+  initTocFab();
+</script>

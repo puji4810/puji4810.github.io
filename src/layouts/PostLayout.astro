@@ -5,6 +5,7 @@ import "../styles/layout.css";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import ArticleSidebar from "../components/ArticleSidebar.astro";
 import TableOfContents from "../components/TableOfContents.astro";
+import TocFab from "../components/TocFab.astro";
 import ReadingProgress from "../components/ReadingProgress.astro";
 import PostFooterNav from "../components/PostFooterNav.astro";
 import fs from 'node:fs';
@@ -121,11 +122,6 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
             </ul>
           )}
         </header>
-        {showToc && (
-          <div data-pagefind-ignore>
-            <TableOfContents headings={headings} variant="inline" />
-          </div>
-        )}
         <article class="render-prose">
           <slot />
         </article>
@@ -138,6 +134,12 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
         {showToc && <TableOfContents headings={headings} />}
       </aside>
     </div>
+
+    {showToc && (
+      <div data-pagefind-ignore>
+        <TocFab headings={headings} />
+      </div>
+    )}
 
     <script>
       import "../scripts/mermaid";

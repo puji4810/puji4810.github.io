@@ -6,6 +6,7 @@ import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMermaidCode from "./src/markdown/remark-mermaid-code.mjs";
+import rehypeTableScroll from "./src/markdown/rehype-table-scroll.mjs";
 import remarkMath from "remark-math";
 
 import expressiveCode from "astro-expressive-code";
@@ -49,6 +50,7 @@ export default defineConfig({
         },
       ],
       rehypeKatex,
+      rehypeTableScroll,
     ],
   },
 });

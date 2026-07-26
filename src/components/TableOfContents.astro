@@ -5,13 +5,12 @@ interface Heading {
   text: string;
 }
 
+/** Sticky rail for wide screens. Narrow screens get TocFab instead. */
 interface Props {
   headings: Heading[];
-  /** "rail" is the sticky desktop column; "inline" is the collapsed mobile block. */
-  variant?: "rail" | "inline";
 }
 
-const { headings, variant = "rail" } = Astro.props;
+const { headings } = Astro.props;
 const filteredHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 3);
 
 // Indent relative to the shallowest heading present, so posts that start at
@@ -22,7 +21,7 @@ const minDepth = filteredHeadings.length
 ---
 
 {filteredHeadings.length > 0 && (
-  <details class={`toc toc-${variant}`} open={variant === "rail"}>
+  <details class="toc toc-rail" open>
     <summary class="toc-summary">
       <span class="toc-summary-label" lang="en">On this page</span>
       <span class="toc-summary-count">{filteredHeadings.length}</span>
@@ -44,20 +43,6 @@ const minDepth = filteredHeadings.length
 <style>
   .toc-rail {
     padding-top: var(--spacing-2);
-  }
-
-  /* The mobile block sits in the article column and yields to the rail. */
-  .toc-inline {
-    margin-bottom: var(--spacing-8);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
-  }
-
-  @media (min-width: 1200px) {
-    .toc-inline {
-      display: none;
-    }
   }
 
   .toc-summary {
@@ -109,18 +94,6 @@ const minDepth = filteredHeadings.length
     margin-bottom: var(--spacing-4);
     padding-bottom: var(--spacing-3);
     border-bottom: 1px solid var(--color-border);
-  }
-
-  .toc-inline > .toc-summary {
-    padding: var(--spacing-3) var(--spacing-4);
-  }
-
-  .toc-inline[open] > .toc-summary {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .toc-inline nav {
-    padding: var(--spacing-3) var(--spacing-4);
   }
 
   .toc-list {
@@ -179,14 +152,15 @@ const minDepth = filteredHeadings.length
 
 <script>
   // Highlights the heading currently under the reading line, and keeps that
-  // entry visible inside the sticky rail without scrolling the page.
+  // entry visible inside its own scrollport without scrolling the page. Runs
+  // once for every list on the page — the rail and the mobile sheet share it.
   function initTocScrollSpy() {
     const links = Array.from(
       document.querySelectorAll<HTMLAnchorElement>(".toc-link")
     );
     if (links.length === 0) return;
 
-    // A heading may appear in both the rail and the mobile block, so group the
+    // A heading appears in both the rail and the mobile sheet, so group the
     // links by target. Slugs are percent-encoded in `hash` (posts use CJK).
     const linksBySlug = new Map<string, HTMLAnchorElement[]>();
     for (const link of links) {
@@ -225,19 +199,22 @@ const minDepth = filteredHeadings.length
       for (const link of linksBySlug.get(slug) ?? []) {
         link.classList.add("is-active");
         link.setAttribute("aria-current", "location");
-        revealInRail(link);
+        revealInList(link);
       }
     }
 
-    // Nudge the rail's own scrollport, never the document.
-    function revealInRail(link: HTMLAnchorElement) {
-      const rail = link.closest<HTMLElement>(".layout-toc");
-      if (!rail || rail.scrollHeight <= rail.clientHeight) return;
-      const railBox = rail.getBoundingClientRect();
+    // Nudge the list's own scrollport, never the document. The sheet is only
+    // scrolled while it is open — moving a hidden list would be wasted work,
+    // and its box has no height to measure against.
+    function revealInList(link: HTMLAnchorElement) {
+      const port = link.closest<HTMLElement>(".layout-toc, .toc-sheet-body");
+      if (!port || port.clientHeight === 0) return;
+      if (port.scrollHeight <= port.clientHeight) return;
+      const portBox = port.getBoundingClientRect();
       const linkBox = link.getBoundingClientRect();
-      if (linkBox.top >= railBox.top && linkBox.bottom <= railBox.bottom) return;
-      rail.scrollTop +=
-        linkBox.top - railBox.top - rail.clientHeight / 2 + linkBox.height / 2;
+      if (linkBox.top >= portBox.top && linkBox.bottom <= portBox.bottom) return;
+      port.scrollTop +=
+        linkBox.top - portBox.top - port.clientHeight / 2 + linkBox.height / 2;
     }
 
     function update() {

@@ -183,10 +183,19 @@ html[data-theme="light"] .expressive-code .ec-line span[style^="--"] {
   display: none;
 }
 
-.render-prose table {
-  width: 100%;
-  border-collapse: collapse;
+/* Wide tables scroll inside this box instead of widening the page. */
+.render-prose .table-scroll {
   margin: var(--spacing-6) 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.render-prose table {
+  /* Fills the column when it fits, overflows the scroll box when it does not. */
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  margin: 0;
   font-size: var(--text-sm);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
