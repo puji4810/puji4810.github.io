@@ -1,19 +1,33 @@
 ---
 import { getCollection, render } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
+import { readingTime } from "../../lib/reading-time";
+import { detectContentLanguage } from "../../lib/content-language";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
   const sortedPosts = posts.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 
-  return posts.map((post) => ({
+  return sortedPosts.map((post, index) => ({
     params: { postPath: post.data.targetUrl.replace(/^\//, "").replace(/\/$/, "") },
-    props: { post, allPosts: sortedPosts },
+    props: {
+      post,
+      allPosts: sortedPosts,
+      // sortedPosts runs newest first, so the neighbour above is the newer one.
+      newer: sortedPosts[index - 1],
+      older: sortedPosts[index + 1],
+    },
   }));
 }
 
-const { post, allPosts } = Astro.props;
+const { post, allPosts, newer, older } = Astro.props;
 const { Content, headings } = await render(post);
+const body = post.body ?? "";
+const { minutes } = readingTime(body);
+const contentLang = detectContentLanguage(body);
+
+const neighbour = (entry?: typeof post) =>
+  entry ? { title: entry.data.title, targetUrl: entry.data.targetUrl } : undefined;
 ---
 
 <PostLayout
@@ -24,6 +38,12 @@ const { Content, headings } = await render(post);
   headings={headings}
   posts={allPosts}
   currentUrl={post.data.targetUrl}
+  tags={post.data.tags}
+  showToc={post.data.showToc}
+  readingMinutes={minutes}
+  contentLang={contentLang}
+  newer={neighbour(newer)}
+  older={neighbour(older)}
 >
   <Content />
 </PostLayout>

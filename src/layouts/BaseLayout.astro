@@ -20,6 +20,12 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Puji's Blog"
+      href={new URL("feed.xml", Astro.site).href}
+    />
     <title>{title}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,6 +43,7 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
           <nav class="header-nav" aria-label="Main navigation">
             <a href="/archive/">Archive</a>
             <a href="/tags/">Tags</a>
+            <a href="/search/">Search</a>
             <a href="/about/">About</a>
           </nav>
         </div>

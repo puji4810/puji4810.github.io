@@ -7,42 +7,120 @@ interface Heading {
 
 interface Props {
   headings: Heading[];
+  /** "rail" is the sticky desktop column; "inline" is the collapsed mobile block. */
+  variant?: "rail" | "inline";
 }
 
-const { headings } = Astro.props;
-const filteredHeadings = headings.filter(h => h.depth > 1 && h.depth <= 3);
+const { headings, variant = "rail" } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth >= 1 && h.depth <= 3);
 
-if (filteredHeadings.length === 0) {
-  return '';
-}
+// Indent relative to the shallowest heading present, so posts that start at
+// `##` are not pushed in just because other posts use `#`.
+const minDepth = filteredHeadings.length
+  ? Math.min(...filteredHeadings.map(h => h.depth))
+  : 1;
 ---
 
-<nav aria-label="Table of Contents" class="toc-nav">
-  <div class="toc-title">On this page</div>
-  <ul class="toc-list">
-    {filteredHeadings.map(heading => (
-      <li class={`toc-item depth-${heading.depth}`}>
-        <a href={`#${heading.slug}`} class="toc-link">
-          {heading.text}
-        </a>
-      </li>
-    ))}
-  </ul>
-</nav>
+{filteredHeadings.length > 0 && (
+  <details class={`toc toc-${variant}`} open={variant === "rail"}>
+    <summary class="toc-summary">
+      <span class="toc-summary-label" lang="en">On this page</span>
+      <span class="toc-summary-count">{filteredHeadings.length}</span>
+    </summary>
+    <nav aria-label="Table of contents">
+      <ul class="toc-list">
+        {filteredHeadings.map(heading => (
+          <li class={`toc-item level-${heading.depth - minDepth}`}>
+            <a href={`#${heading.slug}`} class="toc-link">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </details>
+)}
 
 <style>
-  .toc-nav {
+  .toc-rail {
     padding-top: var(--spacing-2);
   }
 
-  .toc-title {
+  /* The mobile block sits in the article column and yields to the rail. */
+  .toc-inline {
+    margin-bottom: var(--spacing-8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  @media (min-width: 1200px) {
+    .toc-inline {
+      display: none;
+    }
+  }
+
+  .toc-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    cursor: pointer;
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: var(--text-sm);
     color: var(--color-fg-muted);
+    list-style: none;
+  }
+
+  .toc-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc-summary:hover {
+    color: var(--color-accent);
+  }
+
+  .toc-summary-label {
+    flex: 1;
+  }
+
+  .toc-summary-count {
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+    color: var(--color-fg-subtle);
+  }
+
+  /* Chevron rotates to point down once the list is open. */
+  .toc-summary::after {
+    content: "";
+    width: 0.4em;
+    height: 0.4em;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform var(--transition-fast);
+  }
+
+  .toc[open] > .toc-summary::after {
+    transform: rotate(45deg);
+  }
+
+  .toc-rail > .toc-summary {
     margin-bottom: var(--spacing-4);
     padding-bottom: var(--spacing-3);
     border-bottom: 1px solid var(--color-border);
+  }
+
+  .toc-inline > .toc-summary {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+
+  .toc-inline[open] > .toc-summary {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .toc-inline nav {
+    padding: var(--spacing-3) var(--spacing-4);
   }
 
   .toc-list {
@@ -56,8 +134,17 @@ if (filteredHeadings.length === 0) {
     margin-bottom: var(--spacing-1);
   }
 
-  .toc-item.depth-3 {
+  .toc-item.level-1 {
     padding-left: var(--spacing-3);
+  }
+
+  .toc-item.level-2 {
+    padding-left: var(--spacing-5);
+  }
+
+  .toc-item.level-0 > .toc-link {
+    color: var(--color-fg);
+    font-weight: 500;
   }
 
   .toc-link {
@@ -68,7 +155,7 @@ if (filteredHeadings.length === 0) {
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     line-height: 1.5;
-    transition: all var(--transition-fast);
+    transition: color var(--transition-fast), border-color var(--transition-fast);
     border-left: 1.5px solid transparent;
     margin-left: -1.5px;
   }
@@ -79,4 +166,111 @@ if (filteredHeadings.length === 0) {
     border-left-color: var(--color-accent);
     text-decoration: none;
   }
+
+  /* Set by the scroll-spy below; marks the section currently being read.
+     Must out-rank `.toc-item.level-0 > .toc-link` above, which is also three
+     classes — otherwise top-level entries never show as active. */
+  .toc-item > .toc-link.is-active {
+    color: var(--color-accent);
+    border-left-color: var(--color-accent);
+    font-weight: 500;
+  }
 </style>
+
+<script>
+  // Highlights the heading currently under the reading line, and keeps that
+  // entry visible inside the sticky rail without scrolling the page.
+  function initTocScrollSpy() {
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>(".toc-link")
+    );
+    if (links.length === 0) return;
+
+    // A heading may appear in both the rail and the mobile block, so group the
+    // links by target. Slugs are percent-encoded in `hash` (posts use CJK).
+    const linksBySlug = new Map<string, HTMLAnchorElement[]>();
+    for (const link of links) {
+      const slug = decodeURIComponent(link.hash.slice(1));
+      if (!slug) continue;
+      const group = linksBySlug.get(slug);
+      if (group) group.push(link);
+      else linksBySlug.set(slug, [link]);
+    }
+
+    const targets = Array.from(linksBySlug.keys())
+      .map(slug => document.getElementById(slug))
+      .filter((el): el is HTMLElement => el !== null);
+    if (targets.length === 0) return;
+
+    const headerHeight =
+      document.querySelector(".post-page-header")?.getBoundingClientRect()
+        .height ?? 0;
+    // Sits just below where `scroll-margin-top` parks a heading after an
+    // anchor jump. Without the slack a heading landing a fraction of a pixel
+    // short of the line leaves the *previous* entry highlighted, so clicking
+    // an entry appears to do nothing.
+    const readingLine = headerHeight + 24 + 8;
+
+    let activeSlug: string | null = null;
+
+    function setActive(slug: string) {
+      if (slug === activeSlug) return;
+      if (activeSlug) {
+        for (const link of linksBySlug.get(activeSlug) ?? []) {
+          link.classList.remove("is-active");
+          link.removeAttribute("aria-current");
+        }
+      }
+      activeSlug = slug;
+      for (const link of linksBySlug.get(slug) ?? []) {
+        link.classList.add("is-active");
+        link.setAttribute("aria-current", "location");
+        revealInRail(link);
+      }
+    }
+
+    // Nudge the rail's own scrollport, never the document.
+    function revealInRail(link: HTMLAnchorElement) {
+      const rail = link.closest<HTMLElement>(".layout-toc");
+      if (!rail || rail.scrollHeight <= rail.clientHeight) return;
+      const railBox = rail.getBoundingClientRect();
+      const linkBox = link.getBoundingClientRect();
+      if (linkBox.top >= railBox.top && linkBox.bottom <= railBox.bottom) return;
+      rail.scrollTop +=
+        linkBox.top - railBox.top - rail.clientHeight / 2 + linkBox.height / 2;
+    }
+
+    function update() {
+      // The last heading that has crossed the reading line wins; before the
+      // first one crosses, the first heading stays selected.
+      let current = targets[0];
+      for (const target of targets) {
+        if (target.getBoundingClientRect().top > readingLine) break;
+        current = target;
+      }
+      // At the very bottom the last section can never cross the line on its
+      // own, so claim it explicitly.
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      if (atBottom) current = targets[targets.length - 1];
+      setActive(current.id);
+    }
+
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        update();
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
+  initTocScrollSpy();
+</script>

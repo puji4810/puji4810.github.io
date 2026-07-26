@@ -1,0 +1,138 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const pageTitle = "Search";
+const description = "Search every article on this site.";
+---
+
+<BaseLayout title={pageTitle} description={description}>
+  <main class="search-main">
+    <header class="search-header">
+      <h1>Search</h1>
+      <p class="search-meta">Full text across every article. Results narrow as you type.</p>
+    </header>
+
+    <div id="search" class="search-box">
+      <noscript>
+        <p class="search-fallback">
+          Search needs JavaScript. The <a href="/archive/">archive</a> lists every article by date.
+        </p>
+      </noscript>
+    </div>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  /* Pagefind ships its own stylesheet and exposes these hooks; map them onto
+     the site tokens so the widget inherits the parchment theme in both modes. */
+  #search {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: var(--color-accent);
+    --pagefind-ui-text: var(--color-fg);
+    --pagefind-ui-background: var(--color-bg);
+    --pagefind-ui-border: var(--color-border);
+    --pagefind-ui-tag: var(--color-surface);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: var(--radius-md);
+    --pagefind-ui-font: var(--font-sans);
+  }
+
+  #search .pagefind-ui__result-title a {
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+
+  #search .pagefind-ui__result-title a:hover {
+    color: var(--color-accent);
+  }
+
+  #search .pagefind-ui__result-excerpt {
+    font-family: var(--font-serif);
+    color: var(--color-fg-muted);
+  }
+
+  #search mark {
+    background: transparent;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+</style>
+
+<style>
+  .search-main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-8) var(--spacing-5);
+  }
+
+  .search-header {
+    margin-bottom: var(--spacing-8);
+  }
+
+  .search-header h1 {
+    font-family: var(--font-sans);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 var(--spacing-3) 0;
+  }
+
+  .search-meta {
+    font-family: var(--font-serif);
+    font-size: var(--text-base);
+    color: var(--color-fg-muted);
+    margin: 0;
+  }
+
+  .search-fallback {
+    font-family: var(--font-serif);
+    color: var(--color-fg-muted);
+  }
+</style>
+
+<script>
+  // Pagefind's bundle is generated after the Astro build, so it does not exist
+  // during `astro dev`. It is a classic script that assigns window.PagefindUI
+  // rather than an ES module, so it has to be loaded with a script tag.
+  function loadScript(src: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`failed to load ${src}`));
+      document.head.append(script);
+    });
+  }
+
+  async function initSearch() {
+    const container = document.querySelector("#search");
+    if (!container) return;
+
+    try {
+      const styles = document.createElement("link");
+      styles.rel = "stylesheet";
+      styles.href = "/pagefind/pagefind-ui.css";
+      document.head.append(styles);
+
+      await loadScript("/pagefind/pagefind-ui.js");
+      const PagefindUI = (window as any).PagefindUI;
+      if (typeof PagefindUI !== "function") throw new Error("PagefindUI missing");
+
+      new PagefindUI({
+        element: "#search",
+        showSubResults: true,
+        showImages: false,
+        excerptLength: 30,
+        // The index is built with --force-language zh so CJK is segmented
+        // rather than split on whitespace. Ask for that index explicitly —
+        // this page's own lang is en, which would otherwise select nothing.
+        language: "zh",
+      });
+    } catch {
+      container.innerHTML =
+        '<p class="search-fallback">The search index is only built by <code>npm run build</code>. Browse the <a href="/archive/">archive</a> instead.</p>';
+    }
+  }
+
+  initSearch();
+</script>

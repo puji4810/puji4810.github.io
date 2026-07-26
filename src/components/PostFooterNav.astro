@@ -1,0 +1,111 @@
+---
+interface Neighbour {
+  title: string;
+  targetUrl: string;
+}
+
+interface Props {
+  /** Published before the current post. */
+  older?: Neighbour;
+  /** Published after the current post. */
+  newer?: Neighbour;
+}
+
+const { older, newer } = Astro.props;
+---
+
+{(older || newer) && (
+  <nav class="post-footer-nav" aria-label="More articles">
+    {newer ? (
+      <a href={newer.targetUrl} class="post-footer-link is-newer" rel="prev">
+        <span class="post-footer-label" lang="en">Newer</span>
+        <span class="post-footer-title">{newer.title}</span>
+      </a>
+    ) : (
+      <span class="post-footer-spacer"></span>
+    )}
+    {older && (
+      <a href={older.targetUrl} class="post-footer-link is-older" rel="next">
+        <span class="post-footer-label" lang="en">Older</span>
+        <span class="post-footer-title">{older.title}</span>
+      </a>
+    )}
+  </nav>
+)}
+
+<style>
+  .post-footer-nav {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-10);
+    padding-top: var(--spacing-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 640px) {
+    .post-footer-nav {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .post-footer-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    padding: var(--spacing-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-decoration: none;
+    transition: background-color var(--transition-base), border-color var(--transition-base);
+  }
+
+  .post-footer-link:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .is-older {
+    text-align: right;
+  }
+
+  .post-footer-label {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-fg-subtle);
+  }
+
+  .is-newer .post-footer-label::before {
+    content: "← ";
+  }
+
+  .is-older .post-footer-label::after {
+    content: " →";
+  }
+
+  .post-footer-title {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: var(--leading-snug);
+    color: var(--color-fg);
+    transition: color var(--transition-fast);
+  }
+
+  .post-footer-link:hover .post-footer-title {
+    color: var(--color-accent);
+  }
+
+  .post-footer-spacer {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .post-footer-spacer {
+      display: block;
+    }
+  }
+</style>

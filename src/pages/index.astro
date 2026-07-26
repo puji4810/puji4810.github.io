@@ -6,7 +6,9 @@ const posts = await getCollection("posts");
 posts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 
 const featuredPost = posts.find(p => p.data.featured);
-const otherPosts = posts.filter(p => !p.data.featured);
+// Only the post actually shown in the featured slot is held back — filtering
+// on the flag would silently drop every other post marked `featured: true`.
+const otherPosts = posts.filter(p => p !== featuredPost);
 
 const pageTitle = "Home";
 const description = "Puji's Blog: Programming, systems, and design.";

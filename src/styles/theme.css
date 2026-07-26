@@ -3,14 +3,15 @@
   --font-serif: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
   --font-mono: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  /* Warm parchment reading system — accent is the only color */
+  /* Warm parchment reading system — accent is the only color.
+     Every foreground value clears WCAG AA (4.5:1) against --color-bg. */
   --color-bg: #FAF7F2;          /* page: warm parchment */
   --color-bg-elevated: #F2ECE3; /* code blocks, table heads */
   --color-fg: #2C2118;          /* primary: warm dark brown */
-  --color-fg-muted: #7A6A5A;    /* secondary */
-  --color-fg-subtle: #B0A090;   /* muted */
-  --color-accent: #9C6E3C;      /* gold-brown */
-  --color-accent-hover: #855B30;
+  --color-fg-muted: #6F6154;    /* secondary — 5.59:1 */
+  --color-fg-subtle: #7C6D5D;   /* muted — 4.68:1 */
+  --color-accent: #8F6435;      /* gold-brown — 4.86:1 */
+  --color-accent-hover: #7E552B;
   --color-border: #E4DDD4;
   --color-border-light: #EFE9E1;
   --color-surface: #FFFFFF;     /* card surface */
@@ -21,6 +22,9 @@
   --shadow-sm: none;
   --shadow-md: none;
   --shadow-lg: none;
+
+  /* Sticky header height; anchors offset by this so targets clear the bar. */
+  --header-height: 4.0625rem;
 
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
@@ -65,8 +69,8 @@ html[data-theme="dark"] {
   --color-bg: #1A1814;
   --color-bg-elevated: #232019;
   --color-fg: #E8E0D0;          /* warm off-white */
-  --color-fg-muted: #7A7268;
-  --color-fg-subtle: #5A5650;
+  --color-fg-muted: #A79D8E;    /* 6.63:1 */
+  --color-fg-subtle: #8F8579;   /* 4.90:1 */
   --color-accent: #C4A882;      /* lighter gold-brown, same family */
   --color-accent-hover: #D6BE9C;
   --color-border: #2E2B26;

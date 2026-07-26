@@ -5,6 +5,8 @@ import "../styles/layout.css";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import ArticleSidebar from "../components/ArticleSidebar.astro";
 import TableOfContents from "../components/TableOfContents.astro";
+import ReadingProgress from "../components/ReadingProgress.astro";
+import PostFooterNav from "../components/PostFooterNav.astro";
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -30,24 +32,53 @@ interface Props {
   headings: Heading[];
   posts: Post[];
   currentUrl: string;
+  tags?: string[];
+  showToc?: boolean;
+  readingMinutes: number;
+  older?: { title: string; targetUrl: string };
+  newer?: { title: string; targetUrl: string };
+  /** Language of the article body; the surrounding chrome stays English. */
+  contentLang: string;
 }
 
-const { title, subtitle, description, publishedAt, headings, posts, currentUrl } = Astro.props;
+const {
+  title,
+  subtitle,
+  description,
+  publishedAt,
+  headings,
+  posts,
+  currentUrl,
+  tags = [],
+  showToc = true,
+  readingMinutes,
+  older,
+  newer,
+  contentLang,
+} = Astro.props;
 const formattedDate = new Intl.DateTimeFormat("en", {
   dateStyle: "long",
   timeZone: "UTC",
 }).format(publishedAt);
+const isoDate = publishedAt.toISOString();
+const tagAnchor = (tag: string) => `/tags/#${tag.toLowerCase().replace(/\s+/g, "-")}`;
 
 const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-boot.js'), 'utf-8');
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={contentLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Puji's Blog"
+      href={new URL("feed.xml", Astro.site).href}
+    />
     <title>{title}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -58,11 +89,12 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
   </head>
   <body>
     <div class="ambient-glow" aria-hidden="true"></div>
-    <header class="post-page-header">
+    <header class="post-page-header" lang="en">
       <div class="post-page-header-inner">
         <a href="/" class="post-home-link">← Home</a>
         <ThemeToggle />
       </div>
+      <ReadingProgress />
     </header>
 
     <div class="layout-container">
@@ -70,19 +102,40 @@ const themeScript = fs.readFileSync(path.join(process.cwd(), 'src/scripts/theme-
         <ArticleSidebar posts={posts} currentUrl={currentUrl} />
       </aside>
 
-      <main class="layout-content render-shell">
+      <main class="layout-content render-shell" data-pagefind-body>
         <header class="render-header">
-          <p class="post-date">{formattedDate}</p>
+          <p class="post-meta">
+            <time datetime={isoDate}>{formattedDate}</time>
+            <span class="post-meta-sep" aria-hidden="true">·</span>
+            <span>{readingMinutes} min read</span>
+          </p>
           <h1>{title}</h1>
           {subtitle && <p class="post-subtitle">{subtitle}</p>}
+          {tags.length > 0 && (
+            <ul class="post-tags" aria-label="Tags">
+              {tags.map(tag => (
+                <li>
+                  <a href={tagAnchor(tag)} class="tag-pill">#{tag}</a>
+                </li>
+              ))}
+            </ul>
+          )}
         </header>
+        {showToc && (
+          <div data-pagefind-ignore>
+            <TableOfContents headings={headings} variant="inline" />
+          </div>
+        )}
         <article class="render-prose">
           <slot />
         </article>
+        <div data-pagefind-ignore>
+          <PostFooterNav older={older} newer={newer} />
+        </div>
       </main>
 
       <aside class="layout-toc">
-        <TableOfContents headings={headings} />
+        {showToc && <TableOfContents headings={headings} />}
       </aside>
     </div>
 

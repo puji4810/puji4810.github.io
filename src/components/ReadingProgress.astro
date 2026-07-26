@@ -1,0 +1,65 @@
+---
+// Thin indicator pinned to the bottom edge of the sticky post header. It
+// tracks progress through the article body, not the whole document, so the
+// header and footer navigation do not count as "reading".
+---
+
+<div class="reading-progress" aria-hidden="true">
+  <div class="reading-progress-fill"></div>
+</div>
+
+<style>
+  .reading-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.5px;
+    height: 2px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .reading-progress-fill {
+    height: 100%;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  function initReadingProgress() {
+    const fill = document.querySelector<HTMLElement>(".reading-progress-fill");
+    const article = document.querySelector<HTMLElement>(".render-prose");
+    if (!fill || !article) return;
+
+    const header = document.querySelector<HTMLElement>(".post-page-header");
+
+    function update() {
+      const headerHeight = header?.getBoundingClientRect().height ?? 0;
+      const box = article!.getBoundingClientRect();
+      // Distance still to travel before the article's last line is on screen.
+      const span = box.height - (window.innerHeight - headerHeight);
+      const scrolled = headerHeight - box.top;
+      const ratio = span > 0 ? scrolled / span : box.top <= headerHeight ? 1 : 0;
+      fill!.style.transform = `scaleX(${Math.min(Math.max(ratio, 0), 1)})`;
+    }
+
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        update();
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
+  initReadingProgress();
+</script>
